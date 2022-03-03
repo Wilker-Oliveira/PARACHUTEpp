@@ -1,0 +1,19 @@
+
+*Class hierarchy design for the channel modelling repository*
+
+* 1st topics
+** Rice process class (rayleigh as a special case of Rice process,m(t)->0.)
+   Responsabilities:
+   - generates the channel virtual implementation
+   - PSD and autocorrelation(=Calculated by another class=)
+   - Rice and Rayleigh probability density function
+   - Rice and Rayleigh level-crossing rate(=Calculated by another class=)
+   - The average duration of fades(=Calculated by another class=)
+** Spectral properties 
+   Responsabilities:
+   - Jakes PSD
+   - Jakes Autocorrelation
+   - the "Beta" quantity for Jakes PSD
+   - Gaussian PSD
+   - Gaussian Autocorrelation
+   - the "Beta" quantity for Gaussian PSD
