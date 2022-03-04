@@ -3,7 +3,11 @@
 #ifndef SPECTRALPROPERTIES_HPP
 #define SPECTRALPROPERTIES_HPP
 
+#include <cmath>
+
 class SpectralProperties{
+
+
 
 public:
 
