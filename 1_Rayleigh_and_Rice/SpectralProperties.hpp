@@ -7,8 +7,6 @@
 
 class SpectralProperties{
 
-
-
 public:
 
   //also inplement: the Oth-order Bessel function of the first kind.

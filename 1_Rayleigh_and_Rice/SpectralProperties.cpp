@@ -4,6 +4,13 @@
 
 //Jakes Equivalent part 
 
+double SpectralProperties::jakesBeta(double std_dev, double fmax){
+
+  return 2*pow(M_PI*fmax*std_dev, 2);
+}
+
+
+//Gaussian Equivalent part
 double SpectralProperties::GaussianPSD(long long freq, double std_dev, double fc){
   double var=0, AmpConst=0, exp_part=0;
   
