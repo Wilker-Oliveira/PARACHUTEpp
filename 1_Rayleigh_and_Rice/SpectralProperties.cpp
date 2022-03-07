@@ -3,6 +3,19 @@
 //the Oth-order Bessel function of the first kind.
 
 //Jakes Equivalent part 
+double SpectralProperties::jakesPSD(double freq, double std_dev, double fmax){
+  double var=0;
+  var=pow(std_dev,2);
+
+  if(fabs(freq)<=fmax){
+    if(freq==fmax)
+      freq-=0.3;
+    else if (-freq==fmax)
+      freq+=0.3;
+    return var/(M_PI*fmax*sqrt(1-pow(freq/fmax,2)));
+  }
+  return 0;
+}
 
 double SpectralProperties::jakesBeta(double std_dev, double fmax){
 
@@ -11,7 +24,7 @@ double SpectralProperties::jakesBeta(double std_dev, double fmax){
 
 
 //Gaussian Equivalent part
-double SpectralProperties::GaussianPSD(long long freq, double std_dev, double fc){
+double SpectralProperties::GaussianPSD(double freq, double std_dev, double fc){
   double var=0, AmpConst=0, exp_part=0;
   
   var=pow(std_dev,2);
