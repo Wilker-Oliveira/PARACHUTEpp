@@ -33,8 +33,7 @@ double SpectralProperties::besselJ0(double x, int t=4){
   }
 
   return J0;
-}
-
+};
 
 
 //Jakes Equivalent part 
@@ -51,7 +50,7 @@ double SpectralProperties::jakesPSD(double freq, double std_dev, double fmax){
     return var/(M_PI*fmax*sqrt(1-pow(freq/fmax,2)));
   }
   return 0;
-}
+};
 
 double SpectralProperties::jakesACF(float tau, double std_dev, double fmax){
  double var=0,arg=0;
@@ -65,12 +64,12 @@ double SpectralProperties::jakesACF(float tau, double std_dev, double fmax){
  
  return var*besselJ0(arg,0.01f);
 
-}
+};
 
 double SpectralProperties::jakesBeta(double std_dev, double fmax){
 
   return 2*pow(M_PI*fmax*std_dev, 2);
-}
+};
 
 
 //Gaussian Equivalent part
@@ -82,7 +81,7 @@ double SpectralProperties::GaussianPSD(double freq, double std_dev, double fc){
   exp_part=exp(-log(2)*pow(freq/fc,2));
 
   return (var/fc)*AmpConst*exp_part;
-}
+};
 
 double SpectralProperties::GaussianACF(float tau, double std_dev, double fc){
   double var=0, ArgConst=0;
@@ -91,9 +90,9 @@ double SpectralProperties::GaussianACF(float tau, double std_dev, double fc){
   ArgConst=(M_PI*fc*tau)/sqrt(log(2));
 
   return var*exp(-pow(ArgConst, 2));
-}
+};
 
 double SpectralProperties::GaussianBeta(double std_dev, double fc){
 
   return 2*pow(M_PI*fc*std_dev, 2)/log(2);
-}
+};
