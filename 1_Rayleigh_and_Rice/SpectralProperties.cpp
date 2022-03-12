@@ -2,7 +2,8 @@
 
 //the Oth-order Bessel function of the first kind.
 
-//Numerical Integration form (one third of simpson)
+//Numerical Integration form 
+//Obs: numerical method used = one third of simpson
 double SpectralProperties::besselJ0(double x, float step=0.01){
   double I=0,s1=0,s2=0,s3=0;
 
@@ -21,6 +22,8 @@ double SpectralProperties::besselJ0(double x, float step=0.01){
 };
 
 //Truncated infinite power-series form
+//Obs: as any truncated form of a infinite series, it diverges when passes a range,
+//so this can only be used inside of the range, given by some function of t parameter.  
 double SpectralProperties::besselJ0(double x, int t=4){
   double J0=1,x2=x*x,prod=1;
   
@@ -39,6 +42,7 @@ double SpectralProperties::jakesPSD(double freq, double std_dev, double fmax){
   double var=0;
   var=pow(std_dev,2);
 
+  //Obs: "0.3" is an arbitrary constant just to not return an "inf".
   if(fabs(freq)<=fmax){
     if(freq==fmax)
       freq-=0.3;
