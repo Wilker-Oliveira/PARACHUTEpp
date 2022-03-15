@@ -4,11 +4,12 @@
 * 1st topics
 ** Rice process class (rayleigh as a special case of Rice process,m(t)->0.)
    Responsabilities:
-   - generates the channel virtual implementation
+   - +generates the channel virtual implementation+
+   - generate the ideal comparation to the real channel
    - PSD and autocorrelation(=Calculated by another class=)
    - Rice and Rayleigh probability density function
-   - Rice and Rayleigh level-crossing rate(=Calculated by another class=)
-   - The average duration of fades(=Calculated by another class=)
+   - Rice and Rayleigh level-crossing rate
+   - The average duration of fades
 ** Spectral properties 
    Responsabilities:
    - Jakes PSD

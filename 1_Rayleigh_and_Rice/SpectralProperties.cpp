@@ -7,7 +7,8 @@
 double SpectralProperties::besselJ0(double x, float step=0.01){
   double I=0,s1=0,s2=0,s3=0;
 
-  auto f=[](double x,double o){ return cos(x*cos(o)); };
+  //using type deduction to generalize the function f for any datatype.
+  auto f=[](auto x,auto o){ return cos(x*cos(o)); };
 
   for(float i=step;i<(M_PI_2-step);i+=step){
     if(int(i/step)%2!=0) s2+=f(x,i);
