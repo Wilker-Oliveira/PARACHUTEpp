@@ -1,7 +1,7 @@
 *Class hierarchy design for the channel modelling repository*
 
 * 2nd topics
-** SoS model class(virtual class)
+** SoS model (virtual class)
    Responsabilities:
    (one channel "realization") 
    - (virtual function)Estimate the channel parameteres (estimate and set this in the class attributes)
