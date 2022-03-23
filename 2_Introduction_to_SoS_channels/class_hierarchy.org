@@ -13,17 +13,17 @@
 ** Deterministic Properties
    Responsabilities:
    - +Mean value+
-   - Mean power
-   - Autocorrelation function
-   - Cross-correlation function
+   - *Mean power*
+   - *Autocorrelation function*
+   - *Cross-correlation function*
    - /Autocorrelation function of the envelope/
    - /Autocorrelation function of the squared envelope/
-   - Power Spectral Density(PSD)
-   - Cross-power Special Density
+   - *Power Spectral Density(PSD)*
+   - *Cross-power Special Density*
    - /PSD of the envelope/
    - /PSD of the squared envelope/
    - Average doppler shift
    - Doppler spread
    - Periodicity
-   - Level-Crossing Rate
-   - Average duration of fades
+   - *Level-Crossing Rate*
+   - *Average duration of fades*

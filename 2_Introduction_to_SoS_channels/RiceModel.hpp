@@ -9,6 +9,7 @@ class RiceModel{
 
 private:
 
+  short MultPath;
   double *PathGains;
   double *DopplerFrequencies;
   double *Phases;
