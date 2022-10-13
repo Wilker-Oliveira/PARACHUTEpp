@@ -8,6 +8,7 @@
 #include <random>
 #include <chrono>
 #include <cmath>
+#include <stdexcept>
 
 template<short N, typename fpt>
 
@@ -21,32 +22,40 @@ template<short N, typename fpt>
 
 class SoSModel{
 
-private:
+protected:
 
   /** short MultPath.
    * Introducing the necessary variables from equation (4.4) in Chapter 4.
    */
-  std::array<fpt,N> PathGains;
-  std::array<fpt,N> DopplerFrequencies;
-  std::array<fpt,N> Phases;
+  std::array<fpt,N> pathGains;
+  std::array<fpt,N> dopplerFrequencies;
+  std::array<fpt,N> phases;
 
 public:
   
   SoSModel();   /**< Set the attributes to nullptr. */
-  ~SoSModel();  /**< Deletes the attributes. */
+  //~SoSModel();  /**< Deletes the attributes. */
 
-  std::vector<fpt> * CalcProcess(float *t);
+  std::vector<fpt> CalcProcess(std::vector<float> &time);
 
   /** Jakes form */
-  virtual void EstimateModel(float sig /**< std_dev in lin. */, float fmax) = 0;
+  virtual void DefineModel(float sig /**< std_dev in lin. */, float fmax) = 0;
 
   /** Gaussian form */
-  virtual void EstimateModel(float sig /**< std_dev in lin. */, float fc, float kc) = 0;
+  virtual void DefineModel(float sig /**< std_dev in lin. */, float fc, float kc) = 0;
 
   void genPhases();   /**< Considering only random generation until this moment. */
   
 
 };
+
+template<short N, typename fpt>
+SoSModel<N,fpt>::SoSModel(){
+if(!std::is_floating_point<fpt>()) throw std::runtime_error("fpt should be a Floating Point Type");
+
+if(N<=0) throw std::runtime_error("The number of ");
+
+}
 
 template<short N, typename fpt>
 
@@ -63,7 +72,24 @@ void SoSModel<N,fpt>::genPhases() {
   std::default_random_engine generator (seed);
   std::uniform_real_distribution<fpt> distribution(0.0,2*M_PI);
 
-  for(short i=0;i<N;i++) Phases[i] = distribution(generator);
+  for(short i=0;i<N;i++) phases[i] = distribution(generator);
+}
+
+template<short N, typename fpt>
+//return this by reference
+std::vector<fpt> SoSModel<N,fpt>::CalcProcess(std::vector<float> &time){
+
+  fpt aux=0;
+  std::vector<fpt> res;
+  
+  for (auto& t : time){
+    for(short i=0;i<N;i++){
+      aux+=pathGains[i]*cos(2*M_PI*dopplerFrequencies[i]*t + phases[i]);
+    }
+    res.push_back(aux);
+    aux=0;
+  }
+  return res;
 }
 
 #endif
