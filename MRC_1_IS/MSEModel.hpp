@@ -24,15 +24,40 @@ public:
     return I;
 }
 
-  double GaussIntegral(fpt dfreq, float tmax, float fc, float kc, float step =0.01);
+  double GaussIntegral(fpt dfreq, float tmax, float fc, float step =0.01){
+
+    double I=0,s1=0,s2=0,s3=0;
+    auto e=[fc](auto tau){return exp(pow((M_PI*fc*tau),2)/(-M_LN2));};
+    auto f=[](fpt dfreq, auto tau){return e(tau)*cos(2*M_PI*dfreq*tau);};
+
+    for(float i=step;i<(tmax-step);i+=step){
+      if(int(i/step)%2!=0) s2+=fi(dfreq,i);
+      else s3+=f(dfreq,i);
+    }
+
+    s1=f(dfreq,0)+ft(dfreq,tmax);
+
+    I=(s1+4*s2+2*s3)*(step/3);
+
+    return I;
+  }
 
     void DefineModel(float sig /**< std_dev in lin. */, float fmax){
     float tmax = N/(2*fmax);
 
-    for(short n=0;n<N;n++) this->dopplerFrequencies[n]= (fmax*(2*n))/(2*N);
+    for(short n=0;n<N;n++) this->dopplerFrequencies[n] = (fmax*(2*n))/(2*N);
 
      for(short n=0;n<N;n++) this->pathGains[n] = (2*sig)*sqrt( (1.0/tmax)* JakesIntegral(this->dopplerFrequencies[n],tmax,fmax));
 
+    }
+
+    void DefineModel(float sig /**< std_dev in lin. */, float fc, float kc){
+
+      float tmax = N/(2*kc*fc);
+
+      for(short n=0;n<N;n++) this->dopplerFrequencies[n] = (fc*kc*(2*n-1))/(2*N);
+
+      for(short n=0;n<N;n++) this->pathGains[n] = (2*sig)*sqrt( (1.0/tmax)* GaussIntegral(this->dopplerFrequencies[n],tmax,fc));
     }
 
 };
