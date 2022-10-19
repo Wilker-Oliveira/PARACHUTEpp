@@ -1,4 +1,4 @@
-//Implementation of the SoS model class
+/** Implementation of the SoS model class */
 
 #ifndef SOSMODEL_HPP
 #define SOSMODEL_HPP
@@ -36,6 +36,7 @@ public:
   SoSModel();   /**< Set the attributes to nullptr. */
   //~SoSModel();  /**< Deletes the attributes. */
 
+  /** Function implementing equation (4.4). */
   std::vector<fpt> CalcProcess(std::vector<float> &time);
 
   /** Jakes form */
@@ -76,7 +77,15 @@ void SoSModel<N,fpt>::genPhases() {
 }
 
 template<short N, typename fpt>
-//return this by reference
+
+/**
+ * Defining the function CalcProcess()
+ * type: vector
+ * @param time a vector representing the considered time interval
+ * @return res a vector containing the channel realization for each instant of time
+ * return this by reference
+ */
+
 std::vector<fpt> SoSModel<N,fpt>::CalcProcess(std::vector<float> &time){
 
   fpt aux=0;
