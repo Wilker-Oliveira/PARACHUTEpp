@@ -19,11 +19,11 @@ class ProcessElementaryProperties{
     public:
     fpt CalcMeanValue();
     fpt CalcMeanPower(std::array<fpt,N> &pathGains);
-    fpt CalcAutoCorr(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, float tau = 0.1);
-    fpt CalcPSD(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, float var_f);
+    fpt CalcACF(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt tau);
+    fpt CalcPSD(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt var_f);
     fpt CalcDopplerSpread(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies);
-    fpt CalcPeriodicity(std::array<fpt,N> &dopplerFrequencies);
-    std::vector<fpt> ClacPDF(std::array<fpt,N> &pathGains);
+    fpt CalcPeriodicity(std::array<fpt,N> &dopplerFrequencies);//TBD
+    fpt CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/);
   };
 
 /**
@@ -58,11 +58,11 @@ fpt ProcessElementaryProperties<N,fpt>::CalcMeanPower(std::array<fpt,N> &pathGai
  * type: fpt
  * @param pathGains a vector containing the path gains of the channel
  * @param dopplerFrequencies a vector containing the Doppler frequencies of the channel
- * @param tau, the parameter of the autocorrelation; default value 0.1
+ * @param tau, the parameter of the autocorrelation
  * @return the autocorrelation value for a determinate tau
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcAutoCorr(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, float tau = 0.1){
+fpt ProcessElementaryProperties<N,fpt>::CalcACF(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt tau){
   fpt r_mu = 0;
   for(int i=0; i<N; i++){
     r_mu += pow(pathGains[i],2)*cos(2*M_PI*dopplerFrequencies[i]*tau)/2;
@@ -79,7 +79,7 @@ fpt ProcessElementaryProperties<N,fpt>::CalcAutoCorr(std::array<fpt,N> &pathGain
  * @return the PSD value for a determinate var_f
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcPSD(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, float var_f){
+fpt ProcessElementaryProperties<N,fpt>::CalcPSD(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt var_f){
 
   fpt S_f = 0;
   for(int i=0; i<N; i++){
@@ -121,29 +121,24 @@ fpt ProcessElementaryProperties<N,fpt>::CalcDopplerSpread(std::array<fpt,N> &pat
  */
 template<short N, typename fpt>
 fpt ProcessElementaryProperties<N,fpt>::CalcPeriodicity(std::array<fpt,N> &dopplerFrequencies){
-
-  // Search for the greatest commom divisor
-  fpt gcd = 0;
-
-}
+}// finish later
 
 
-// finish later
+
 
 /**
  * Function for the Probability Density of the process
  * type: vector
  * @param pathGains a vector containing the path gains of the channel
- * @return PDF of the process
+ * @return 
  */
 template<short N, typename fpt>
-std::vector<fpt> ProcessElementaryProperties<N,fpt>::CalcPDF(std::array<fpt,N> &pathGains){
+fpt ProcessElementaryProperties<N,fpt>::CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/){
 
-  std::vector<fpt> p_n;
-  fpt p_x = 0;
-
-  for(int i=0; i<N; i++){
+  if(fabs(x) < pathGain){
+    return 1/(M_PI*fabs(pathGain)*pow(1-pow(x/pathGain,2),1/2) );
   }
+  else return 0;
 }
 
 #endif

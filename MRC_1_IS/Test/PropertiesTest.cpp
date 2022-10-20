@@ -16,12 +16,14 @@ int main(){
 
   MEDModel<N,float> u1;
   u1.genPhases();
-  u1.DefineModel(0.7071,fmax);
+  u1.DefineModel(0.7071,fmax);//0.7071 is the standard deviation of the process(sig)
 
   meanPower = u1.CalcMeanPower(); 
   meanValue = u1.CalcMeanValue();
 
   cout<<"The process gaussian process u1 has the mean power of "<<meanPower<<" and the mean value of "<<meanValue<<".\n";
+  
+  //mean power is ideally equal to sig^2
 
   return 0;
 }

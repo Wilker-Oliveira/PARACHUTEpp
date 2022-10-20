@@ -53,7 +53,10 @@ public:
   /** Calculating the properties of the SoSModel through the processPRoperties class */
   fpt CalcMeanValue();
   fpt CalcMeanPower();
-
+  fpt CalcACF(fpt tau);
+  fpt CalcPSD(fpt vat_f);
+  fpt CalcDopplerSpread();
+  //add periocity after implementation
 };
 //create another constructor to initiate all the class members at once
 template<short N, typename fpt>
