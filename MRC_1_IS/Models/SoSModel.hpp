@@ -7,7 +7,6 @@
 #include <array>
 #include <random>
 #include <chrono>
-#include <cmath>
 #include <stdexcept>
 #include "ProcessElementaryProperties.hpp"
 

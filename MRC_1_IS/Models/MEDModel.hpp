@@ -19,8 +19,7 @@ public:
   * Computes the doppler frequencies and path gains of the MSE method applied on the Jakes power spectral density
   * type: void
   * @param sig a float, the standard deviation of the channel
-  * @param fmax a float, the maximum frequency of the channel
-  * @return pathGains[] and dopplerFrequencies[]
+  * @param fmax a float, the maximum Doppler frequency of the channel
   */
   void DefineModel(float sig /**< std_dev in lin. */, float fmax){
   for(short n=0;n<N;n++) this->dopplerFrequencies[n]= (fmax*(2*(n+1)-1))/(2*N);
@@ -39,7 +38,6 @@ public:
   * @param sig a float, the standard deviation of the channel
   * @param fc a float, the 3dB cut-off frequency
   * @param kc a float, constant to attend the mean power condition
-  * @return pathGains[] and dopplerFrequencies[]
   */
   void DefineModel(float sig /**< std_dev in lin. */, float fc, float kc){
     
