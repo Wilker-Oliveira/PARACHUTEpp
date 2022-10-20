@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
-#include "MEDModel.hpp"
+#include "../Models/MEDModel.hpp"
 
 using namespace std;
 

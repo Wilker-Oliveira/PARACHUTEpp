@@ -9,6 +9,7 @@
 #include <chrono>
 #include <cmath>
 #include <stdexcept>
+#include "ProcessElementaryProperties.hpp"
 
 template<short N, typename fpt>
 
@@ -18,7 +19,7 @@ template<short N, typename fpt>
  * in Mobile Radio Channels (2nd edition) by Matthias Patzold, Chapter 5.
  */
 
-/** Add a restriction for fpt, to only float and double types. */
+/** restriction for fpt, to only float, double and long double types. */
 
 class SoSModel{
 
@@ -36,6 +37,9 @@ public:
   SoSModel();   /**< Set the attributes to nullptr. */
   //~SoSModel();  /**< Deletes the attributes. */
 
+  ProcessElementaryProperties<N,fpt> processProperties;
+
+
   /** Function implementing equation (4.4). */
   std::vector<fpt> CalcProcess(std::vector<float> &time);
 
@@ -47,15 +51,16 @@ public:
 
   void genPhases();   /**< Considering only random generation until this moment. */
   
+  /** Calculating the properties of the SoSModel through the processPRoperties class */
+  fpt CalcMeanValue();
+  fpt CalcMeanPower();
 
 };
-
+//create another constructor to initiate all the class members at once
 template<short N, typename fpt>
 SoSModel<N,fpt>::SoSModel(){
-if(!std::is_floating_point<fpt>()) throw std::runtime_error("fpt should be a Floating Point Type");
-
-if(N<=0) throw std::runtime_error("The number of ");
-
+  if(!std::is_floating_point<fpt>()) throw std::runtime_error("fpt should be a Floating Point Type");
+  if(N<=0) throw std::runtime_error("The number of multipath must be positive");
 }
 
 template<short N, typename fpt>
@@ -83,9 +88,10 @@ template<short N, typename fpt>
  * type: vector
  * @param time a vector representing the considered time interval
  * @return res a vector containing the channel realization for each instant of time
- * return this by reference
  */
 
+
+//return this by reference!
 std::vector<fpt> SoSModel<N,fpt>::CalcProcess(std::vector<float> &time){
 
   fpt aux=0;
@@ -100,5 +106,18 @@ std::vector<fpt> SoSModel<N,fpt>::CalcProcess(std::vector<float> &time){
   }
   return res;
 }
+
+//Document me
+template<short N, typename fpt>
+fpt SoSModel<N,fpt>::CalcMeanValue(){
+  return processProperties.CalcMeanValue();
+}
+
+//Document me
+template<short N, typename fpt>
+fpt SoSModel<N,fpt>::CalcMeanPower(){
+  return processProperties.CalcMeanPower(this->pathGains);
+}
+
 
 #endif
