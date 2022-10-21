@@ -33,7 +33,7 @@ protected:
 
 public:
   
-  SoSModel();   /**< Set the attributes to nullptr. */
+  SoSModel();   /**< Set the attributes to nullptr. */  
   //~SoSModel();  /**< Deletes the attributes. */
 
   ProcessElementaryProperties<N,fpt> processProperties;
@@ -58,7 +58,7 @@ public:
   fpt CalcDopplerSpread();
   //add periocity after implementation
 };
-//create another constructor to initiate all the class members at once
+
 template<short N, typename fpt>
 SoSModel<N,fpt>::SoSModel(){
   if(!std::is_floating_point<fpt>()) throw std::runtime_error("fpt should be a Floating Point Type");

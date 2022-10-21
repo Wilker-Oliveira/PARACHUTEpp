@@ -13,6 +13,18 @@ class MEDModel: public SoSModel<N, fpt> {
   
 public:
 
+  
+  MEDModel(float sig, float fmax){
+    DefineModel(sig, fmax);
+    this->genPhases();
+  }
+
+  MEDModel(float sig, float fc, float kc){
+    DefineModel(sig, fc, kc);
+    this->genPhases();
+  }
+
+  
  /**
   * \brief Defining the function DefineModel() for the Jakes PSD
   *
@@ -21,6 +33,7 @@ public:
   * @param sig a float, the standard deviation of the channel
   * @param fmax a float, the maximum Doppler frequency of the channel
   */
+
   void DefineModel(float sig /**< std_dev in lin. */, float fmax){
   for(short n=0;n<N;n++) this->dopplerFrequencies[n]= (fmax*(2*(n+1)-1))/(2*N);
   

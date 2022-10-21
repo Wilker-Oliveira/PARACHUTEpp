@@ -13,6 +13,17 @@ class MSEModel: public SoSModel<N,fpt>{
 
 public:
 
+  MSEModel(float sig, float fmax){
+    DefineModel(sig, fmax);
+    this->genPhases();
+  }
+
+  MSEModel(float sig, float fc, float kc){
+    DefineModel(sig, fc, kc);
+    this->genPhases();
+  }
+  
+
   /**
    * \brief Defining the function besselJ0()
    *
@@ -24,22 +35,22 @@ public:
    * @return the value of the Bessel function J0(x)
    */
   double besselJ0(double x, float step=0.01){
-  double I=0,s1=0,s2=0,s3=0;
-
-  /** using type deduction to generalize the function f for any datatype. */
-  auto f=[](auto x,auto o){ return cos(x*cos(o)); };
-
-  for(float i=step;i<(M_PI_2-step);i+=step){
-    if(int(i/step)%2!=0) s2+=f(x,i);
-    else s3+=f(x,i);
-  }
   
-  s1=f(x,0)+f(x,M_PI_2);
+    double I=0,s1=0,s2=0,s3=0;
+    /** using type deduction to generalize the function f for any datatype. */
+    auto f=[](auto x,auto o){ return cos(x*cos(o)); };
 
-  I=(s1+4*s2+2*s3)*(step/3);
+    for(float i=step;i<(M_PI_2-step);i+=step){
+      if(int(i/step)%2!=0) s2+=f(x,i);
+      else s3+=f(x,i);
+    }
   
-  return M_2_PI*I;
-};
+    s1=f(x,0)+f(x,M_PI_2);
+
+    I=(s1+4*s2+2*s3)*(step/3);
+    
+    return M_2_PI*I;
+  };
 
   /**
    * \brief Defining the function JakesIntegral()
@@ -69,7 +80,7 @@ public:
     I=(s1+4*s2+2*s3)*(step/3);
     
     return I;
-}
+  }
 
   /**
    * \brief Defining the function GaussianIntegral()

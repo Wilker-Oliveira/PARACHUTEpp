@@ -14,10 +14,8 @@ int main(){
   float meanPower=0;
   float meanValue=0;
 
-  MEDModel<N,float> u1;
-  u1.genPhases();
-  u1.DefineModel(0.7071,fmax);//0.7071 is the standard deviation of the process(sig)
-
+  MEDModel<N,float> u1(0.7071,fmax);//0.7071 is the standard deviation of the process(sig)
+  
   meanPower = u1.CalcMeanPower(); 
   meanValue = u1.CalcMeanValue();
 
