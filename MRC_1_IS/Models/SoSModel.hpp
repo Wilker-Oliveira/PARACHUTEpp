@@ -54,7 +54,7 @@ public:
   fpt CalcMeanValue();
   fpt CalcMeanPower();
   fpt CalcACF(fpt tau);
-  fpt CalcPSD(fpt vat_f);
+  fpt CalcPSD(fpt f);
   fpt CalcDopplerSpread();
   //add periocity after implementation
 };
@@ -119,6 +119,24 @@ fpt SoSModel<N,fpt>::CalcMeanValue(){
 template<short N, typename fpt>
 fpt SoSModel<N,fpt>::CalcMeanPower(){
   return processProperties.CalcMeanPower(this->pathGains);
+}
+
+//Document me
+template<short N, typename fpt>
+fpt SoSModel<N,fpt>::CalcACF(fpt tau){
+  return processProperties.CalcACF(this->pathGains, this->dopplerFrequencies, tau);
+}
+
+//Document me
+template<short N, typename fpt>
+fpt SoSModel<N,fpt>::CalcPSD(fpt f){
+  return processProperties.CalcPSD(this->pathGains, this->dopplerFrequencies, f);
+}
+
+//Document me
+template<short N, typename fpt>
+fpt SoSModel<N,fpt>::CalcDopplerSpread(){
+  return processProperties.CalcDopplerSpread(this->pathGains, this->dopplerFrequencies);
 }
 
 
