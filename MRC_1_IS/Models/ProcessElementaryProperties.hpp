@@ -17,13 +17,13 @@ template<short N, typename fpt>
 
 class ProcessElementaryProperties{
     public:
-    fpt CalcMeanValue();
-    fpt CalcMeanPower(std::array<fpt,N> &pathGains);
-    fpt CalcACF(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt tau);
-    fpt CalcPSD(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt var_f);
-    fpt CalcDopplerSpread(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies);
-    fpt CalcPeriodicity(std::array<fpt,N> &dopplerFrequencies);//TBD
-    fpt CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/);
+    fpt CalcMeanValue() const;
+    fpt CalcMeanPower(const std::array<fpt,N> &pathGains) const;
+    fpt CalcACF(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt tau) const;
+    fpt CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f) const;
+    fpt CalcDopplerSpread(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies) const;
+    fpt CalcPeriodicity(const std::array<fpt,N> &dopplerFrequencies) const;//TBD
+    fpt CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/) const;
   };
 
 /**
@@ -33,7 +33,7 @@ class ProcessElementaryProperties{
  * @return 0, mean of the gaussian random process
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcMeanValue(){return 0;}
+fpt ProcessElementaryProperties<N,fpt>::CalcMeanValue() const {return 0;}
 
 
 /**
@@ -43,7 +43,7 @@ fpt ProcessElementaryProperties<N,fpt>::CalcMeanValue(){return 0;}
  * @return MeanPower
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcMeanPower(std::array<fpt,N> &pathGains){
+fpt ProcessElementaryProperties<N,fpt>::CalcMeanPower(const std::array<fpt,N> &pathGains) const {
     fpt MeanPower=0;
     for(int i=0; i<N; i++){
       MeanPower+=pow(pathGains[i],2)/2;
@@ -62,7 +62,7 @@ fpt ProcessElementaryProperties<N,fpt>::CalcMeanPower(std::array<fpt,N> &pathGai
  * @return the autocorrelation value for a determinate tau
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcACF(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt tau){
+fpt ProcessElementaryProperties<N,fpt>::CalcACF(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt tau) const {
   fpt r_mu = 0;
   for(int i=0; i<N; i++){
     r_mu += pow(pathGains[i],2)*cos(2*M_PI*dopplerFrequencies[i]*tau)/2;
@@ -79,7 +79,7 @@ fpt ProcessElementaryProperties<N,fpt>::CalcACF(std::array<fpt,N> &pathGains, st
  * @return the PSD value for a determinate var_f
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcPSD(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies, fpt var_f){
+fpt ProcessElementaryProperties<N,fpt>::CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f) const {
 
   fpt S_f = 0;
   for(int i=0; i<N; i++){
@@ -98,7 +98,7 @@ fpt ProcessElementaryProperties<N,fpt>::CalcPSD(std::array<fpt,N> &pathGains, st
  * @return Doppler spread of the process
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcDopplerSpread(std::array<fpt,N> &pathGains, std::array<fpt,N> &dopplerFrequencies){
+fpt ProcessElementaryProperties<N,fpt>::CalcDopplerSpread(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies) const {
 
   fpt dopplerSpread;
   fpt beta_i = 0, sum = 0;
@@ -120,7 +120,7 @@ fpt ProcessElementaryProperties<N,fpt>::CalcDopplerSpread(std::array<fpt,N> &pat
  * @return if exists, returns the periodicity. If not, returns 0.
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcPeriodicity(std::array<fpt,N> &dopplerFrequencies){
+fpt ProcessElementaryProperties<N,fpt>::CalcPeriodicity(const std::array<fpt,N> &dopplerFrequencies) const {
 }// finish later
 
 
@@ -133,7 +133,7 @@ fpt ProcessElementaryProperties<N,fpt>::CalcPeriodicity(std::array<fpt,N> &doppl
  * @return 
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/){
+fpt ProcessElementaryProperties<N,fpt>::CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/) const {
 
   if(fabs(x) < pathGain){
     return 1/(M_PI*fabs(pathGain)*pow(1-pow(x/pathGain,2),1/2) );

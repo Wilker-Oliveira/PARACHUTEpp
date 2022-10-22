@@ -34,7 +34,7 @@ public:
    * @param step a float, step of the numerical integration, default value 0.01
    * @return the value of the Bessel function J0(x)
    */
-  double besselJ0(double x, float step=0.01){
+  double besselJ0(double x, float step=0.01) const {
   
     double I=0,s1=0,s2=0,s3=0;
     /** using type deduction to generalize the function f for any datatype. */
@@ -64,7 +64,7 @@ public:
    * @param step a float, step of the numerical integration, default value 0.001
    * @return I the integral value
    */
-  double JakesIntegral(fpt dfreq, float tmax, float fmax, float step =0.001){
+  double JakesIntegral(fpt dfreq, float tmax, float fmax, float step =0.001) const {
 
 
     double I=0,s1=0,s2=0,s3=0;
@@ -94,12 +94,12 @@ public:
    * @param step a float, step of the numerical integration, default value 0.001
    * @return I the integral value
    */
-  double GaussIntegral(fpt dfreq, float tmax, float fc, float step =0.001){
+  double GaussIntegral(fpt dfreq, float tmax, float fc, float step =0.001) const {
 
     double I=0,s1=0,s2=0,s3=0;
     auto e=[fc](auto tau){return exp(-pow((M_PI*fc*tau),2)/(M_LN2));};
 
-    auto f=[e](fpt dfreq, auto tau){return e(tau)*cos(2*M_PI*dfreq*tau);};
+    auto f=[&e](fpt dfreq, auto tau){return e(tau)*cos(2*M_PI*dfreq*tau);};
 
     for(float i=step;i<(tmax-step);i+=step){
       if(int(i/step)%2!=0) s2+=f(dfreq,i);

@@ -4,7 +4,6 @@
 #define SOSMODEL_HPP
 
 #include <vector>
-#include <array>
 #include <random>
 #include <chrono>
 #include <stdexcept>
@@ -14,7 +13,7 @@ template<short N, typename fpt>
 
 /**
  * SoSModel class
- * Implements the Sum of Sisoids model using the methods
+ * Implements the Sum of Sinusoids model using the methods
  * in Mobile Radio Channels (2nd edition) by Matthias Patzold, Chapter 5.
  */
 
@@ -40,7 +39,7 @@ public:
 
 
   /** Function implementing equation (4.4). */
-  std::vector<fpt> CalcProcess(std::vector<float> &time);
+  std::vector<fpt> CalcProcess(const std::vector<float> &time) const;
 
   /** Jakes form */
   virtual void DefineModel(float sig /**< std_dev in lin. */, float fmax) = 0;
@@ -51,11 +50,11 @@ public:
   void genPhases();   /**< Considering only random generation until this moment. */
   
   /** Calculating the properties of the SoSModel through the processPRoperties class */
-  fpt CalcMeanValue();
-  fpt CalcMeanPower();
-  fpt CalcACF(fpt tau);
-  fpt CalcPSD(fpt f);
-  fpt CalcDopplerSpread();
+  fpt CalcMeanValue() const;
+  fpt CalcMeanPower() const;
+  fpt CalcACF(fpt tau) const;
+  fpt CalcPSD(fpt f) const;
+  fpt CalcDopplerSpread() const;
   //add periocity after implementation
 };
 
@@ -94,7 +93,7 @@ template<short N, typename fpt>
 
 
 //return this by reference!
-std::vector<fpt> SoSModel<N,fpt>::CalcProcess(std::vector<float> &time){
+std::vector<fpt> SoSModel<N,fpt>::CalcProcess(const std::vector<float> &time) const {
 
   fpt aux=0;
   std::vector<fpt> res;
@@ -111,31 +110,31 @@ std::vector<fpt> SoSModel<N,fpt>::CalcProcess(std::vector<float> &time){
 
 //Document me
 template<short N, typename fpt>
-fpt SoSModel<N,fpt>::CalcMeanValue(){
+fpt SoSModel<N,fpt>::CalcMeanValue() const {
   return processProperties.CalcMeanValue();
 }
 
 //Document me
 template<short N, typename fpt>
-fpt SoSModel<N,fpt>::CalcMeanPower(){
+fpt SoSModel<N,fpt>::CalcMeanPower() const {
   return processProperties.CalcMeanPower(this->pathGains);
 }
 
 //Document me
 template<short N, typename fpt>
-fpt SoSModel<N,fpt>::CalcACF(fpt tau){
+fpt SoSModel<N,fpt>::CalcACF(fpt tau) const {
   return processProperties.CalcACF(this->pathGains, this->dopplerFrequencies, tau);
 }
 
 //Document me
 template<short N, typename fpt>
-fpt SoSModel<N,fpt>::CalcPSD(fpt f){
+fpt SoSModel<N,fpt>::CalcPSD(fpt f) const {
   return processProperties.CalcPSD(this->pathGains, this->dopplerFrequencies, f);
 }
 
 //Document me
 template<short N, typename fpt>
-fpt SoSModel<N,fpt>::CalcDopplerSpread(){
+fpt SoSModel<N,fpt>::CalcDopplerSpread() const {
   return processProperties.CalcDopplerSpread(this->pathGains, this->dopplerFrequencies);
 }
 
