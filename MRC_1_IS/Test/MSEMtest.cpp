@@ -22,16 +22,11 @@ int main(){
   fstream OutFile;
   ostream_iterator<string> out_it (OutFile,";");
 
-  MSEModel<N,float> u1,u2;
+  MSEModel<N,float> u1(0.7071,fmax),u2(0.7071,fmax);
   vector<float> time((tf-ti)/dt);
 
   for(float i=0;i<(tf-ti)/dt;i++) time[i] = ti + i*dt;
   
-  u1.genPhases();
-  u1.DefineModel(0.7071,fmax);
-  u2.genPhases();
-  u2.DefineModel(0.7071,fmax);
-
   vector<float> u1value = u1.CalcProcess(time);
   vector<float> u2value = u2.CalcProcess(time);
 
