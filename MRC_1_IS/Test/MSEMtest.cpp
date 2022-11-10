@@ -9,6 +9,8 @@
 
 using namespace std;
 
+//double AutoCorrelation(); 
+
 int main(){
 
   float ti=0, tf=2, dt=0.0005;

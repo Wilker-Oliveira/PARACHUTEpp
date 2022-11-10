@@ -4,41 +4,39 @@ template<short N, typename fpt>
 
 class MEAModel: public SoSModel<N,fpt>{
 
+protected: 
+
+  //template function for gaussian PSD equation
+  fpt GaussianPSDe(fpt n, fpt dfreq, float &fc){
+    return ( (n/N)-std::erf(dfreq*(std::sqrt<fpt>( std::numbers::ln2_v<fpt> )/fc) ) );
+  }
+
 public:
 
-    MEAModel(float sig, float fmax){
-        DefineModel(sig, fmax);
-        this->genPhases();
-    }
+  typedef fpt (*RTFF)(fpt,fpt,float&);
 
-    MEAModel(float sig, float fc, float kc){
-        DefineModel(sig, fc, kc);
-        this->genPhases();
-    }
+  MEAModel(float sig, float fmax){
+    DefineModel(sig, fmax);
+    this->genPhases();
+  }
 
-    double rootFunc(int n, float fc, float TOL = 0.05) {
+  MEAModel(float sig, float fc, float kc){
+    DefineModel(sig, fc, kc);
+    this->genPhases();
+  }
 
-        auto f = [fc](auto dfreq){return (n/N) - erf(dfreq*sqrt(log(2))/fc)};
+  //bissec method receiving the cost function
+  //change a,b to be a tuble container
+  fpt bissecMethod(fpt a, fpt b, fpt tol/*tolerance*/, RTFF f, short lim=100);
 
-        // preciso definir o intervalo e tolerância
-        float a,b;
-        float x;
+  //DefineModel for jakes PSD
+  void DefineModel(float sig /**< std_dev in lin. */, float fmax){}
 
-        while (diff > TOL){
-            diff = fabs(a-b)/2;
-            x = (a+b)/2;
+  //DefineModel for Gaussian PSD
+  void DefineModel(float sig /**< std_dev in lin. */, float fc, float kc){}
 
-            if(f(x) == 0){
-                return x;
-                break;
-            }
-            if(f(a)*f(x) < 0){
-                b = x;
-            }
-            else a = x;
-            }
 
-        return x;
-    }
 };
 
+template<short N, typename fpt>
+fpt MEAModel<N, fpt>::bissecMethod(fpt a, fpt b, fpt tol, RTFF f, short lim){};

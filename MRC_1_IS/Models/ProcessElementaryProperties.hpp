@@ -4,6 +4,7 @@
 #define PROCESSELEMETARYPROPERTIES_HPP
 
 #include <array>
+#include <numbers>
 #include <cmath>
 
 template<short N, typename fpt>
