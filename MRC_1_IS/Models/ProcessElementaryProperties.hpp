@@ -1,4 +1,4 @@
-/** Implementation of the Process Elementary Properties class */
+/** @brief Implementation of the Process Elementary Properties class. */
 
 #ifndef PROCESSELEMETARYPROPERTIES_HPP
 #define PROCESSELEMETARYPROPERTIES_HPP
@@ -10,8 +10,8 @@
 template<short N, typename fpt>
 
 /**
- * ProcessElementaryProperties class
- * Implements the elementary properties of the Sum of Sinusoids model, described
+ * @brief The ProcessElementaryProperties class
+ * implements the elementary properties of the Sum of Sinusoids model, described
  * in Mobile Radio Channels (2nd edition) by Matthias Patzold, Chapter 4, section 4.2.
  */
 
@@ -28,20 +28,20 @@ class ProcessElementaryProperties{
   };
 
 /**
- * Function for the mean value of the process
- * type: fpt
- * No parameters
- * @return 0, mean of the gaussian random process
+ * @brief Function for the mean value of the process.
+ * @brief Type: fpt.
+ * @brief There are no parameters.
+ * @return the value 0, theoretical mean of the gaussian random process.
  */
 template<short N, typename fpt>
 fpt ProcessElementaryProperties<N,fpt>::CalcMeanValue() const {return 0;}
 
 
 /**
- * Function for the mean power of the process
- * type: fpt
+ * @brief Function for the mean power of the process.
+ * @brief Type: fpt.
  * @param pathGains a vector containing the path gains of the channel
- * @return MeanPower
+ * @return the theoretical mean power of the process.
  */
 template<short N, typename fpt>
 fpt ProcessElementaryProperties<N,fpt>::CalcMeanPower(const std::array<fpt,N> &pathGains) const {
@@ -52,15 +52,13 @@ fpt ProcessElementaryProperties<N,fpt>::CalcMeanPower(const std::array<fpt,N> &p
     return MeanPower;
 }
 
-// finish now
-
 /**
- * Function for the autocorrelation of the process
- * type: fpt
+ * @brief Function for the autocorrelation of the process.
+ * @brief Type: fpt.
  * @param pathGains a vector containing the path gains of the channel
  * @param dopplerFrequencies a vector containing the Doppler frequencies of the channel
- * @param tau, the parameter of the autocorrelation
- * @return the autocorrelation value for a determinate tau
+ * @param tau the parameter of the autocorrelation
+ * @return the theoretical autocorrelation value for a determinated tau.
  */
 template<short N, typename fpt>
 fpt ProcessElementaryProperties<N,fpt>::CalcACF(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt tau) const {
@@ -72,12 +70,12 @@ fpt ProcessElementaryProperties<N,fpt>::CalcACF(const std::array<fpt,N> &pathGai
 }
 
 /**
- * Function for the power spectral density of the process
- * type: fpt
+ * @brief Function for the power spectral density of the process.
+ * @brief Type: fpt.
  * @param pathGains a vector containing the path gains of the channel
  * @param dopplerFrequencies a vector containing the Doppler frequencies of the channel
- * @param var_f, the parameter of the PSD (frequency domain)
- * @return the PSD value for a determinate var_f
+ * @param var_f the parameter of the PSD (frequency domain)
+ * @return the theoretical PSD value for a determinate var_f.
  */
 template<short N, typename fpt>
 fpt ProcessElementaryProperties<N,fpt>::CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f) const {
@@ -92,11 +90,11 @@ fpt ProcessElementaryProperties<N,fpt>::CalcPSD(const std::array<fpt,N> &pathGai
 }
 
 /**
- * Function for the Doppler spread of the process
- * type: fpt
+ * @brief Function for the Doppler spread of the process.
+ * @brief Type: fpt.
  * @param pathGains a vector containing the path gains of the channel
  * @param dopplerFrequencies a vector containing the Doppler frequencies of the channel
- * @return Doppler spread of the process
+ * @return Doppler spread of the process.
  */
 template<short N, typename fpt>
 fpt ProcessElementaryProperties<N,fpt>::CalcDopplerSpread(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies) const {
@@ -115,8 +113,8 @@ fpt ProcessElementaryProperties<N,fpt>::CalcDopplerSpread(const std::array<fpt,N
 }
 
 /**
- * Function for the periodicity of the process
- * type: fpt
+ * @brief Function for the periodicity of the process.
+ * @brief Type: fpt.
  * @param dopplerFrequencies a vector containing the Doppler frequencies of the channel
  * @return if exists, returns the periodicity. If not, returns 0.
  */
@@ -128,10 +126,11 @@ fpt ProcessElementaryProperties<N,fpt>::CalcPeriodicity(const std::array<fpt,N> 
 
 
 /**
- * Function for the Probability Density of the process
- * type: vector
- * @param pathGains a vector containing the path gains of the channel
- * @return 
+ * @brief Function for the Probability Density of the process.
+ * @brief Type: dpt.
+ * @param pathGain a fpt containing the path gains of the channel
+ * @param x targeted value of the process
+ * @return the PDF of the process.
  */
 template<short N, typename fpt>
 fpt ProcessElementaryProperties<N,fpt>::CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/) const {

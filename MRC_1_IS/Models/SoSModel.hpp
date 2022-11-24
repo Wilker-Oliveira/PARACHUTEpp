@@ -1,4 +1,6 @@
-/** Implementation of the SoS model class */
+/**
+ * @brief Implementation of the SoS model class.
+*/
 
 #ifndef SOSMODEL_HPP
 #define SOSMODEL_HPP
@@ -12,44 +14,45 @@
 template<short N, typename fpt>
 
 /**
- * SoSModel class
- * Implements the Sum of Sinusoids model using the methods
+ * @brief The SoSModel class
+ * implements the Sum of Sinusoids model using the methods
  * in Mobile Radio Channels (2nd edition) by Matthias Patzold, Chapter 5.
  */
 
-/** restriction for fpt, to only float, double and long double types. */
+/** @brief Restriction for fpt, to only float, double and long double types. */
 
 class SoSModel{
 
 protected:
 
-  /** short MultPath.
+  /**
+   *@brief Short MultPath.
    * Introducing the necessary variables from equation (4.4) in Chapter 4.
    */
-  std::array<fpt,N> pathGains;
-  std::array<fpt,N> dopplerFrequencies;
-  std::array<fpt,N> phases;
+  std::array<fpt,N> pathGains; /**< a N-dimensional array of type fpt containing the path gains $c_{i,n}$ of the process. */
+  std::array<fpt,N> dopplerFrequencies; /**< dopplerFrequencies a N-dimensional array of type fpt containing the Doppler frequencies $f_{i,n}$ of the process. */
+  std::array<fpt,N> phases; /**< a N-dimensional array of type fpt containing the phases $\theta_{i,n}$ of the process. */
 
 public:
   
   SoSModel();   /**< Set the attributes to nullptr. */  
   //~SoSModel();  /**< Deletes the attributes. */
 
-  ProcessElementaryProperties<N,fpt> processProperties;
+  ProcessElementaryProperties<N,fpt> processProperties; /**< An object of type ProcessElementaryProperties to be used for this class and all derived classes to execute the calculation of the gaussian process referred in the class. */
 
 
-  /** Function implementing equation (4.4). */
+  /** @brief Function implementing equation (4.4) from Mobile Radio Channels by Matthias Patzold. */
   std::vector<fpt> CalcProcess(const std::vector<float> &time) const;
 
-  /** Jakes form */
-  virtual void DefineModel(float sig /**< std_dev in lin. */, float fmax) = 0;
+  /** @brief Jakes power spectral density form */
+  virtual void DefineModel(float sig, float fmax) = 0;
 
-  /** Gaussian form */
-  virtual void DefineModel(float sig /**< std_dev in lin. */, float fc, float kc) = 0;
+  /** @brief Gaussian power spectral density form */
+  virtual void DefineModel(float sig, float fc, float kc) = 0;
 
-  void genPhases();   /**< Considering only random generation until this moment. */
+  void genPhases();   /**< @brief Considering only random generation until this moment. */
   
-  /** Calculating the properties of the SoSModel through the processPRoperties class */
+  /** @brief Calculating the parametric properties of the SoSModel through the processProperties class */
   fpt CalcMeanValue() const;
   fpt CalcMeanPower() const;
   fpt CalcACF(fpt tau) const;
@@ -67,10 +70,10 @@ SoSModel<N,fpt>::SoSModel(){
 template<short N, typename fpt>
 
 /**
- * Defining the function genPhases()
- * type: void
- * No parameters
- * @return A uniformely distributed random value in the interval [0,2*pi]
+ * @brief Defining the function genPhases().
+ * @brief This function generates a uniformely distributed pseudorandom value in the interval [0,2*$\pi$].
+ * @brief Type: void.
+ * @brief There are no parameters.
  */
 
 void SoSModel<N,fpt>::genPhases() {
@@ -85,12 +88,11 @@ void SoSModel<N,fpt>::genPhases() {
 template<short N, typename fpt>
 
 /**
- * Defining the function CalcProcess()
- * type: vector
- * @param time a vector representing the considered time interval
- * @return res a vector containing the channel realization for each instant of time
+ * @brief Defining the function CalcProcess().
+ * @brief Type: vector.
+ * @param time a vector representing the considered time interval.
+ * @return A vector containing the channel realization for each instant of time.
  */
-
 
 //return this by reference!
 std::vector<fpt> SoSModel<N,fpt>::CalcProcess(const std::vector<float> &time) const {
@@ -108,31 +110,56 @@ std::vector<fpt> SoSModel<N,fpt>::CalcProcess(const std::vector<float> &time) co
   return res;
 }
 
-//Document me
+/**
+ *@brief Implementing the function CalcMeanValue().
+ *@brief Type: fpt.
+ *@brief There are no parameters.
+ *@return The mean value of the process.
+ */
 template<short N, typename fpt>
 fpt SoSModel<N,fpt>::CalcMeanValue() const {
   return processProperties.CalcMeanValue();
 }
 
-//Document me
+/**
+ *@brief Implementing the function CalcMeanPower().
+ *@brief Type: fpt.
+ *@brief There are no parameters.
+ *@return The theoretical mean power of the process.
+ */
 template<short N, typename fpt>
 fpt SoSModel<N,fpt>::CalcMeanPower() const {
   return processProperties.CalcMeanPower(this->pathGains);
 }
 
-//Document me
+/**
+ *@brief Implementing the function CalcACF().
+ *@brief Type: fpt.
+ *@brief There are no parameters.
+ *@return The theoretical autocorrelation function of the process.
+ */
 template<short N, typename fpt>
 fpt SoSModel<N,fpt>::CalcACF(fpt tau) const {
   return processProperties.CalcACF(this->pathGains, this->dopplerFrequencies, tau);
 }
 
-//Document me
+/**
+ *@brief Implementing the function CalcPSD().
+ *@brief Type: fpt.
+ *@brief There are no parameters.
+ *@return the theoretical power spectral density of the process.
+ */
 template<short N, typename fpt>
 fpt SoSModel<N,fpt>::CalcPSD(fpt f) const {
   return processProperties.CalcPSD(this->pathGains, this->dopplerFrequencies, f);
 }
 
-//Document me
+/**
+ *@brief Implementing the function CalcDopplerspread().
+ *@brief Type: fpt.
+ *@brief There are no parameters.
+ *@return The theoretical doppler spread of the process.
+ */
 template<short N, typename fpt>
 fpt SoSModel<N,fpt>::CalcDopplerSpread() const {
   return processProperties.CalcDopplerSpread(this->pathGains, this->dopplerFrequencies);
