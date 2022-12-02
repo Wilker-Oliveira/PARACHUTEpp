@@ -22,7 +22,7 @@ int main(){
   fstream OutFile;
   ostream_iterator<string> out_it (OutFile,";");
 
-  MEAModel<N,float> u1(0.7071,fmax),u2(0.7071,fmax);
+  MCModel<N,float> u1(0.7071,fmax),u2(0.7071,fmax);
   vector<float> time((tf-ti)/dt);
 
   for(float i=0;i<(tf-ti)/dt;i++) time[i] = ti + i*dt;

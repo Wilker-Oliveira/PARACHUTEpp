@@ -1,7 +1,7 @@
 #ifndef MCMODEL_HPP
 #define MCMODEL_HPP
 
-#include "MEAModel.hpp"
+#include "SoSModel.hpp"
 
 template<short N, typename fpt>
 
@@ -11,7 +11,7 @@ template<short N, typename fpt>
  * @brief This model is described in Section 5.1.4 from Mobile Radio Channels by Matthias Patzold.
  */
 
-class MCModel: public MEAModel<N, fpt>{
+class MCModel: public SoSModel<N, fpt>{
 
 private:
   
@@ -69,6 +69,13 @@ public:
     this->genPhases();
   }
 
+  template<typename F>
+  
+  /**
+   * @brief Declaring the function bisecmethod(). 
+   */
+  fpt bisecMethod(fpt a, fpt b, fpt tol/*tolerance*/, F f, short lim=100);
+
   /**
    * @brief Defining the function DefineModel() for the Jakes PSD.
    * @brief This function computes the doppler frequencies and path gains of the MCM method applied on the Jakes power spectral density.
@@ -94,10 +101,45 @@ public:
     for(short n=0;n<N;n++){
       auto GaussF = [fc,this](fpt dfreq){return this->gaussianPSDe(dfreq, fc);};
 
-      this->dopplerFrequencies[n] = this->bissecMethod(0, 3*fc/std::sqrt(std::numbers::ln2_v<float>), 0.005, GaussF);
+      this->dopplerFrequencies[n] = this->bisecMethod(0, 3*fc/std::sqrt(std::numbers::ln2_v<float>), 0.005, GaussF);
 
     }
   }
 };
+
+template<short N, typename fpt>
+template<typename F>
+
+/**
+ * @brief Defining the function bisecmethod().
+ * @brief This function implements the bisection method to find the roots of a given expression in a determined interval.
+ * @brief The parameters of this function must attend the bisection method criteria.
+ * @param a a fpt, the inferior limit of the interval
+ * @param b a fpt, the superior limit of the interval
+ * @param tol a fpt, the stopping criterion of the method
+ * @param f as F, a typename template, the function for which the root must be found
+ * @param lim a short, the maximum number of iteractions to be executed in order to guarantee convergence
+ * @return The root of the function in the interval [a,b].
+ */
+fpt MCModel<N, fpt>::bisecMethod(fpt a, fpt b, fpt tol, F f, short lim){
+  
+  fpt res=(a+b)/2;
+  short c=0;
+  
+  if(fabs(f(a))<=tol) return a;
+
+  if(fabs(f(b))<=tol) return b;
+
+  while(fabs(f(res))>tol && c<lim){
+    if(f(a)*f(res)<0) b=res;
+    else a=res;
+
+    res=(a+b)/2;
+    c++;
+  }
+
+  return res;
+};
+
 
 #endif
