@@ -1,3 +1,6 @@
+#ifndef MSEMODEL_HPP
+#define MSEMODEL_HPP
+
 #include "SoSModel.hpp"
 
 template<short N, typename fpt>
@@ -154,3 +157,5 @@ public:
     }
 
 };
+
+#endif

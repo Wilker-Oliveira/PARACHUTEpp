@@ -1,3 +1,6 @@
+#ifndef MCMODEL_HPP
+#define MCMODEL_HPP
+
 #include "MEAModel.hpp"
 
 template<short N, typename fpt>
@@ -96,3 +99,5 @@ public:
     }
   }
 };
+
+#endif

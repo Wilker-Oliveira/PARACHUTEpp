@@ -1,3 +1,6 @@
+#ifndef MEDMODEL_HPP
+#define MEDMODEL_HPP
+
 #include "SoSModel.hpp"
 
 template<short N, typename fpt>
@@ -66,3 +69,4 @@ public:
 
 };
 
+#endif

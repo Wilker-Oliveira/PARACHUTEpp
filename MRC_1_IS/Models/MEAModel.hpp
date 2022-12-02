@@ -1,3 +1,6 @@
+#ifndef MEAMODEL_HPP
+#define MEAMODEL_HPP
+
 #include "SoSModel.hpp"
 
 template<short N, typename fpt>
@@ -123,3 +126,5 @@ fpt MEAModel<N, fpt>::bisecMethod(fpt a, fpt b, fpt tol, F f, short lim){
 
   return res;
 };
+
+#endif
