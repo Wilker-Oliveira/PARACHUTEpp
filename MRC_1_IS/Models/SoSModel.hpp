@@ -22,16 +22,16 @@ template<short N, typename fpt>
 /** @brief Restriction for fpt, to only float, double and long double types. */
 
 class SoSModel{
+  /**
+ *@brief Short MultPath.
+ * Introducing the necessary variables from equation (4.4) in Chapter 4.
+ */
 
 protected:
 
-  /**
-   *@brief Short MultPath.
-   * Introducing the necessary variables from equation (4.4) in Chapter 4.
-   */
-  std::array<fpt,N> pathGains; /**< a N-dimensional array of type fpt containing the path gains $c_{i,n}$ of the process. */
-  std::array<fpt,N> dopplerFrequencies; /**< dopplerFrequencies a N-dimensional array of type fpt containing the Doppler frequencies $f_{i,n}$ of the process. */
-  std::array<fpt,N> phases; /**< a N-dimensional array of type fpt containing the phases $\theta_{i,n}$ of the process. */
+  std::array<fpt,N> pathGains; /**< N-dimensional array of type fpt containing the path gains \f$c_{i,n}\f$ of the process. */
+  std::array<fpt,N> dopplerFrequencies; /**< N-dimensional array of type fpt containing the Doppler frequencies \f$f_{i,n}\f$ of the process. */
+  std::array<fpt,N> phases; /**< N-dimensional array of type fpt containing the phases \f$\theta_{i,n}\f$ of the process. */
 
 public:
   
@@ -71,7 +71,7 @@ template<short N, typename fpt>
 
 /**
  * @brief Defining the function genPhases().
- * @brief This function generates a uniformely distributed pseudorandom value in the interval [0,2*$\pi$].
+ * @brief This function generates a uniformely distributed pseudorandom value in the interval \f$[0,2*\pi]\f$.
  * @brief Type: void.
  * @brief There are no parameters.
  */
