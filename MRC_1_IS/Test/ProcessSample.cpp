@@ -7,7 +7,7 @@
 #include <vector>
 
 //Model used in this code
-#include "../Models/MEAModel.hpp"
+#include "../Models/JakesModel.hpp"
 
 using namespace std;
 
@@ -27,8 +27,8 @@ int main(){
   ostream_iterator<string> out_it (OutFile,";");
   vector<float> time((tf-ti)/dt);
 
-  MEAModel<N,float> u1(0.7071,fmax);
-  MEAModel<N+1,float>  u2(0.7071,fmax);
+  JakesModel<N,float> u1(0.7071,fmax,false);
+  JakesModel<N+1,float>  u2(0.7071,fmax,true);
 
 
   for(float i=0;i<(tf-ti)/dt;i++) time[i] = ti + i*dt;
@@ -36,7 +36,7 @@ int main(){
   vector<float> u1value = u1.CalcProcess(time);
   vector<float> u2value = u2.CalcProcess(time);
 
-  OutFile.open("RayleighChannelMC.csv", ios::out | ios::trunc);
+  OutFile.open("RayleighChannelJakes.csv", ios::out | ios::trunc);
 
   OutFile<<"time"<<';';
   OutFile<<"u1"<<';';

@@ -20,7 +20,10 @@ public:
    * @brief Here, the genphases() function is overridden in order to propperly implement equation (5.62) in Section 5.1.5 from Mobile Radio Channels by Matthias Patzold.
    */
   JakesModel(float sig, float fmax, bool i_2 = false){
-    DefineModel(sig, fmax, i_2);
+    if(i_2==false)
+      DefineModel(sig, fmax);
+    else
+      DefineModelImag(sig, fmax);
     genPhases();
   }
 
@@ -52,24 +55,35 @@ public:
    * @param fmax a float, the maximum Doppler frequency of the channel
    * @param i_2 a boolean, true if the process is the complex component of the channel and false otherwise. Default = false
    */
-  void DefineModel(float sig, float fmax, bool i_2 = false){
+  void DefineModel(float sig, float fmax){
     
     for(short n=0;n<N;n++){
-      if(n==N-1) this->dopplerFrequencies[n] = fmax*std::cos(M_PI*(n+1)/((2*N)-1));
+      if(n==N-1) this->dopplerFrequencies[n] = fmax*std::cos(M_PI*((float)n+1)/((2*N)-1));
       else this->dopplerFrequencies[n] = fmax;
     }
 
-    if(i_2==false)
-      for(short n=0;n<N-1;n++)
-	this->pathGains[n] = (2*sig/(std::sqrt(N - 0.5)))*std::sin(M_PI*(n+1)/(N-1));
+    for(short n=0;n<N-1;n++)
+      this->pathGains[n] = (2*sig/(std::sqrt(N - 0.5)))*std::sin(M_PI*((float)n+1)/(N-1));
       
-    else
-      for(short n=0;n<N-1;n++)
-	this->pathGains[n] =  (2*sig/(std::sqrt(N - 0.5)))*std::cos(M_PI*(n+1)/(N-1));
-    
     
     this->pathGains[N-1] = sig/(std::sqrt(N - 0.5));
   }
+
+  void DefineModelImag(float sig, float fmax){
+    
+    for(short n=0;n<N;n++){
+      if(n==N-1) this->dopplerFrequencies[n] = fmax*std::cos(M_PI*((float)n+1)/((2*N)-1));
+      else this->dopplerFrequencies[n] = fmax;
+    }
+
+    for(short n=0;n<N-1;n++)
+      this->pathGains[n] =  (2*sig/(std::sqrt(N - 0.5)))*std::cos(M_PI*((float)n+1)/(N-1));    
+    this->pathGains[N-1] = sig/(std::sqrt(N - 0.5));
+
+  }
+  
+
+  
   /**
     * @brief Defining the function DefineModel() for the Gaussian PSD.
     * @brief This returns a message of error, given that the Jakes method does not perform well for gaussian distribution.
