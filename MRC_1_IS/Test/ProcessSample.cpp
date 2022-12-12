@@ -13,11 +13,12 @@ using namespace std;
 
 int main(){
 
-  const short N = 20; //number of multipath
-  float fc=2e9, mtv=10/3.6;
+  const short N = 10; //number of multipath
+  float fc=2e9, mtv=30/3.6;
   float fmax=(mtv*fc)/3e8; //for jakes PSD 
+  fmax=91;
   float tc=1/fmax;
-  float ti=0, tf=10*tc, dt=0.0005;
+  float ti=0, tf=30*tc, dt=0.0005;
   
   float fcut = std::sqrt(std::numbers::ln2_v<float>)*fmax; //for gaussian PSD
   float kc = 2.0/std::sqrt(2.0/std::numbers::ln2_v<float>); //for gaussiain PSD
@@ -27,8 +28,9 @@ int main(){
   ostream_iterator<string> out_it (OutFile,";");
   vector<float> time((tf-ti)/dt);
 
-  JakesModel<N,float> u1(0.7071,fmax,false);
-  JakesModel<N+1,float>  u2(0.7071,fmax,true);
+  JakesModel<N,float> u1(1,fmax,false);
+  JakesModel<N,float>  u2(1,fmax,true);
+
 
 
   for(float i=0;i<(tf-ti)/dt;i++) time[i] = ti + i*dt;

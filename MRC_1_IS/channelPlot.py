@@ -26,7 +26,7 @@ def AutoCorrelation(h,k):
 
     return ri
 
-df=pd.read_csv("RayleighChannelMC.csv",delimiter=';')
+df=pd.read_csv("RayleighChannelJakes.csv",delimiter=';')
 
 u1 = np.array(df.u1.tolist())
 u2 = 1j*np.array(df.u2.tolist())
@@ -34,7 +34,7 @@ t = np.array(df.time.tolist())
 
 coherence_time=float(input("coherence time: "))
 
-k=(10*coherence_time)/0.0005
+k=(30*coherence_time)/0.0005
 
 
 rij=np.zeros(int(k/2),dtype = 'complex_')
@@ -52,6 +52,6 @@ plt.plot(t[0:int(k)],lin2db(g[0:int(k)]))
 
 plt.figure()
 rij=AutoCorrelation(h,k/2)
-plt.plot(np.real(rij)/len(rij))
+plt.plot(t[0:int(k/2)],np.real(rij)/len(rij),)
 
 plt.show()

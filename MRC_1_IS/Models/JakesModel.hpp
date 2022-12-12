@@ -1,4 +1,5 @@
 #include "SoSModel.hpp"
+#include <iostream>
 
 template<short N, typename fpt>
 
@@ -56,30 +57,29 @@ public:
    * @param i_2 a boolean, true if the process is the complex component of the channel and false otherwise. Default = false
    */
   void DefineModel(float sig, float fmax){
-    
-    for(short n=0;n<N;n++){
-      if(n==N-1) this->dopplerFrequencies[n] = fmax*std::cos(M_PI*((float)n+1)/((2*N)-1));
-      else this->dopplerFrequencies[n] = fmax;
-    }
+ 
+    float scale=sig/(std::sqrt(N - 0.5));
 
     for(short n=0;n<N-1;n++)
-      this->pathGains[n] = (2*sig/(std::sqrt(N - 0.5)))*std::sin(M_PI*((float)n+1)/(N-1));
-      
-    
-    this->pathGains[N-1] = sig/(std::sqrt(N - 0.5));
+      this->dopplerFrequencies[n] = fmax*std::cos(M_PI*(n+1)/((2*N)-1));
+    this->dopplerFrequencies[N-1] = fmax;
+
+    for(short n=0;n<N-1;n++)
+      this->pathGains[n] = (2*scale)*std::sin(M_PI*(n+1)/(N-1));  
+    this->pathGains[N-1] = scale;
   }
 
   void DefineModelImag(float sig, float fmax){
     
-    for(short n=0;n<N;n++){
-      if(n==N-1) this->dopplerFrequencies[n] = fmax*std::cos(M_PI*((float)n+1)/((2*N)-1));
-      else this->dopplerFrequencies[n] = fmax;
-    }
+    float scale=sig/(std::sqrt(N - 0.5));
 
     for(short n=0;n<N-1;n++)
-      this->pathGains[n] =  (2*sig/(std::sqrt(N - 0.5)))*std::cos(M_PI*((float)n+1)/(N-1));    
-    this->pathGains[N-1] = sig/(std::sqrt(N - 0.5));
+      this->dopplerFrequencies[n] = fmax*std::cos(M_PI*(n+1)/((2*N)-1));    
+    this->dopplerFrequencies[N-1] = fmax;
 
+    for(short n=0;n<N-1;n++)
+      this->pathGains[n] =  (2*scale)* std::cos((M_PI*(n+1))/(N-1));
+    this->pathGains[N-1] = scale;
   }
   
 
