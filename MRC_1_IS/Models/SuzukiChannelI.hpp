@@ -14,12 +14,12 @@ template<short N1, short N2, short N3, typename fpt>
 class SuzukiChannelI{
 
 protected:
-  /**Declaring the Rayleigh processes. */
-  MEDSModel<N1, fpt> *u1;
-  MEDSModel<N2, fpt> *u2;
   
-  /** Declaring the Gaussian process. */
-  MEDSModel<N3, fpt> *u3;
+  MEDSModel<N1, fpt> *u1; /**< Declaring the Rayleigh process \f$\tilde{\mu_1}\f$. */
+  MEDSModel<N2, fpt> *u2; /**< Declaring the Rayleigh processes \f$\tilde{\mu_2}\f$. */
+  
+  
+  MEDSModel<N3, fpt> *u3; /**< Declaring the Gaussian process \f$\tilde{\nu_3}\f$. */
   
   fpt p; /**< The amplitude of the LoS component.*/
   fpt fp; /**< The Doppler frequency of the LoS component.*/

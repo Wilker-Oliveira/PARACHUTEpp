@@ -49,12 +49,11 @@ public:
   }
 
   /**
-   * @brief Defining the function DefineModel() for the Jakes PSD.
+   * @brief Defining the function DefineModel() for the Jakes PSD of the real component process.
    * @brief This function computes the doppler frequencies and path gains of the MCM method applied on the Jakes power spectral density.
    * @brief Type: void.
    * @param sig a float, the standard deviation of the channel
    * @param fmax a float, the maximum Doppler frequency of the channel
-   * @param i_2 a boolean, true if the process is the complex component of the channel and false otherwise. Default = false
    */
   void DefineModel(float sig, float fmax){
  
@@ -69,6 +68,13 @@ public:
     this->pathGains[N-1] = scale;
   }
 
+  /**
+   * @brief Defining the function DefineModel() for the Jakes PSD of the imaginary component process.
+   * @brief This function computes the doppler frequencies and path gains of the MCM method applied on the Jakes power spectral density.
+   * @brief Type: void.
+   * @param sig a float, the standard deviation of the channel
+   * @param fmax a float, the maximum Doppler frequency of the channel
+   */
   void DefineModelImag(float sig, float fmax){
     
     float scale=sig/(std::sqrt(N - 0.5));
@@ -86,7 +92,7 @@ public:
   
   /**
     * @brief Defining the function DefineModel() for the Gaussian PSD.
-    * @brief This returns a message of error, given that the Jakes method does not perform well for gaussian distribution.
+    * @brief This function returns a message of error, given that the Jakes method does not perform well for gaussian distribution.
     * @brief Type: void.
     * @param sig a float, the standard deviation of the channel
     * @param fc a float, the 3dB cut-off frequency

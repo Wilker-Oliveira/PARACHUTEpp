@@ -28,7 +28,8 @@ protected:
   fpt GaussianPSDe(fpt dfreq, fpt n, float fc){
     return ( ((2*(n+1)-1)/((fpt)2*N))-std::erf(dfreq*(std::sqrt( std::numbers::ln2_v<fpt> )/fc) ) );
   }
-  fpt ko;
+  
+  fpt ko; /**< The ratio of the minimum to the maximum doppler frequency. */
 
 public:
 
@@ -36,8 +37,8 @@ public:
    * @brief Default constructor for the Jakes power spectral density form.
    * @param sig a float, standard deviation of the process
    * @param fmax a float, the maximum Doppler frequency of the process
-   * @param halfpower a boolean, true when simulating a Suzuki channel, false otherwise; default = false
-   * @param ko a float, the ratio of the minimum and maximum doppler frequencies, with values in the interval \f$[0,1]\f$; default = 1
+   * @param halfpower a boolean, true when simulating a Suzuki channel, false otherwise, default = false
+   * @param ko a float, the ratio of the minimum and maximum doppler frequencies, with values in the interval \f$[0,1]\f$, default = 1
    */
   MEDSModel(float sig, float fmax, bool halfpower=false,float ko=1){
     this->ko=ko;
