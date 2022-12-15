@@ -12,11 +12,14 @@ protected:
   fpt GaussianPSDe(fpt dfreq, fpt n, float fc){
     return ( ((2*(n+1)-1)/((fpt)2*N))-std::erf(dfreq*(std::sqrt( std::numbers::ln2_v<fpt> )/fc) ) );
   }
+  fpt ko;
 
 public:
 
-  MEDSModel(float sig, float fmax){
+  MEDSModel(float sig, float fmax, bool halfpower=false,float ko=1){
+    this->ko=ko;
     DefineModel(sig, fmax);
+    if(halfpower==true) ScalePathGains(1/M_SQRT2);
     this->genPhases();
   }
   
@@ -34,9 +37,11 @@ public:
 
 
   void DefineModel(float sig, float fmax){
-    for(short n=0;n<N;n++) this->pathGains[n]=sig*std::sqrt(2/((float)N));
-    for(short n=0;n<N;n++) this->dopplerFrequencies[n]=fmax*std::sin((M_PI/(2*N))*(n-0.5));
+    float Nscale=N/(M_2_PI*asin(this->ko));
+    for(short n=0;n<N;n++) this->pathGains[n]=sig*std::sqrt(2/((float)Nscale));
+    for(short n=0;n<N;n++) this->dopplerFrequencies[n]=fmax*std::sin((M_PI/(2*Nscale))*(n-0.5));
   }
+
   
   void DefineModel(float sig, float fc, float kc){
     //Beta from MRC 3.68
@@ -52,6 +57,14 @@ public:
 
     this->dopplerFrequencies[N-1] = sqrt((beta*N)/pow(2*M_PI*sig,2) - aux);
 
+  }
+
+  //Extra functions for implementing the Suzuki channels
+  void ScalePathGains(float scaleFactor){
+    for(short n=0;n<N;n++) this->pathGains[n]*=scaleFactor;
+  }
+  void addPhase(float theta){
+    for(short n=0;n<N;n++) this->phases[n]+=theta;
   }
 
 

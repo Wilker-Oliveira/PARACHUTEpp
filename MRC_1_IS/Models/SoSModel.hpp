@@ -44,6 +44,9 @@ public:
   /** @brief Function implementing equation (4.4) from Mobile Radio Channels by Matthias Patzold. */
   std::vector<fpt> CalcProcess(const std::vector<float> &time) const;
 
+  /** @brief Function that calculates the process after passing through a hilbert transform. */
+  std::vector<fpt> CalcHilbertProcess(const std::vector<float> &time) const;
+
   /** @brief Jakes power spectral density form */
   virtual void DefineModel(float sig, float fmax) = 0;
 
@@ -64,7 +67,7 @@ public:
 template<short N, typename fpt>
 SoSModel<N,fpt>::SoSModel(){
   if(!std::is_floating_point<fpt>()) throw std::runtime_error("fpt should be a Floating Point Type");
-  if(N<=0) throw std::runtime_error("The number of multipath must be positive");
+  if(N<0) throw std::runtime_error("The number of multipath must be positive or zero");
 }
 
 template<short N, typename fpt>
@@ -103,6 +106,31 @@ std::vector<fpt> SoSModel<N,fpt>::CalcProcess(const std::vector<float> &time) co
   for (auto& t : time){
     for(short i=0;i<N;i++){
       aux+=pathGains[i]*cos(2*M_PI*dopplerFrequencies[i]*t + phases[i]);
+    }
+    res.push_back(aux);
+    aux=0;
+  }
+  return res;
+}
+
+template<short N, typename fpt>
+
+/**
+ * @brief Defining the function CalcHilbertProcess().
+ * @brief Type: vector.
+ * @param time a vector representing the considered time interval.
+ * @return A vector containing the channel realization for each instant of time.
+ */
+
+//return this by reference!
+std::vector<fpt> SoSModel<N,fpt>::CalcHilbertProcess(const std::vector<float> &time) const {
+
+  fpt aux=0;
+  std::vector<fpt> res;
+  
+  for (auto& t : time){
+    for(short i=0;i<N;i++){
+      aux+=pathGains[i]*sin(2*M_PI*dopplerFrequencies[i]*t + phases[i]);
     }
     res.push_back(aux);
     aux=0;
