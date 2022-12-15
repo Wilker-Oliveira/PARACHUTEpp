@@ -5,10 +5,26 @@
 
 template<short N, typename fpt>
 
+/**
+ * @brief Implementaton of the Method of Exact Doppler Spread.
+ * @brief This class executes the MEDS method for computing the Doppler Frequencies and Path Gains.
+ * @brief This model is described in Section 5.1.7 from Mobile Radio Channels by Matthias Patzold.
+ */
+
 class MEDSModel: public SoSModel<N,fpt>{
 
 protected:
 
+  /**
+   * @brief Template function for gaussian power spectral density equation.
+   * @brief This function is the implementaton of equation (5.89a) in Mobile Radio Channels by Matthias Patzold.
+   * It is used to determine the doppler frequencies of the process.
+   * @brief Type: fpt.
+   * @param dfreq a fpt, represents the dopplerFrequencies elements
+   * @param n a fpt, the index of the frequency
+   * @param fc a float, the 3dB cut-off frequency
+   * @return The value of expression.
+   */
   fpt GaussianPSDe(fpt dfreq, fpt n, float fc){
     return ( ((2*(n+1)-1)/((fpt)2*N))-std::erf(dfreq*(std::sqrt( std::numbers::ln2_v<fpt> )/fc) ) );
   }
@@ -16,13 +32,26 @@ protected:
 
 public:
 
+  /**
+   * @brief Default constructor for the Jakes power spectral density form.
+   * @param sig a float, standard deviation of the process
+   * @param fmax a float, the maximum Doppler frequency of the process
+   * @param halfpower a boolean, true when simulating a Suzuki channel, false otherwise; default = false
+   * @param ko a float, the ratio of the minimum and maximum doppler frequencies, with values in the interval \f$[0,1]\f$; default = 1
+   */
   MEDSModel(float sig, float fmax, bool halfpower=false,float ko=1){
     this->ko=ko;
     DefineModel(sig, fmax);
     if(halfpower==true) ScalePathGains(1/M_SQRT2);
     this->genPhases();
   }
-  
+
+  /**
+   * @brief Default constructor for the Gauss power spectral density form.
+   * @param sig a float, standard deviation of the process
+   * @param fc a float, the 3dB cut-off frequency
+   * @param kc a float, constant to attend the mean power condition
+   */
   MEDSModel(float sig, float fc, float kc){
     DefineModel(sig, fc, kc);
     this->genPhases();
@@ -35,14 +64,27 @@ public:
    */
   fpt bisecMethod(fpt a, fpt b, fpt tol/*tolerance*/, F f, short lim=100);
 
-
+  /**
+   * @brief Defining the function DefineModel() for the Jakes PSD.
+   * @brief This function computes the doppler frequencies and path gains of the MCM method applied on the Jakes power spectral density.
+   * @brief Type: void.
+   * @param sig a float, the standard deviation of the channel
+   * @param fmax a float, the maximum Doppler frequency of the channel
+   */
   void DefineModel(float sig, float fmax){
     float Nscale=N/(M_2_PI*asin(this->ko));
     for(short n=0;n<N;n++) this->pathGains[n]=sig*std::sqrt(2/((float)Nscale));
     for(short n=0;n<N;n++) this->dopplerFrequencies[n]=fmax*std::sin((M_PI/(2*Nscale))*(n-0.5));
   }
 
-  
+  /**
+    * @brief Defining the function DefineModel() for the Gaussian PSD.
+    * @brief This function computes the doppler frequencies and path gains of the MCM method applied on the Gaussian power spectral density
+    * @brief Type: void.
+    * @param sig a float, the standard deviation of the channel
+    * @param fc a float, the 3dB cut-off frequency
+    * @param kc a float, constant to attend the mean power condition
+    */
   void DefineModel(float sig, float fc, float kc){
     //Beta from MRC 3.68
     fpt aux=0, beta=2*pow(M_PI*fc*sig,2)/log(2);
@@ -59,10 +101,21 @@ public:
 
   }
 
-  //Extra functions for implementing the Suzuki channels
+  /**
+   * @brief Defining the ScalePathGains() function.
+   * @brief This function modifies the path gains computed to attend the power adaptation of the Suzuki process.
+   * @brief Type: void.
+   * @param scaleFactor a float, the component that performs the scaling of the path gains.
+   */
   void ScalePathGains(float scaleFactor){
     for(short n=0;n<N;n++) this->pathGains[n]*=scaleFactor;
   }
+  /**
+   * @brief Defining the addPhase() function.
+   * @brief This function adds a phase shift on the process.
+   * @brief Type: void.
+   * @param theta a float, the considered phase shift.
+   */
   void addPhase(float theta){
     for(short n=0;n<N;n++) this->phases[n]+=theta;
   }
