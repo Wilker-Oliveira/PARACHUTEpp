@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QtCharts>
 #include <QComboBox>
+#include <QTabWidget>
 
 #include <cmath>
 #include <complex>
@@ -33,9 +34,21 @@ public:
 
 private:
 
-    void recalcSeries();
-
+    QTabWidget *tabManager;
     Ui::MainWindow *ui;
+
+};
+
+class ChannelImpulseResponse : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ChannelImpulseResponse(QWidget *parent = nullptr);
+
+private:
+
+    void recalcSeries();
 
     //Object and widgets
     QComboBox *funcType = nullptr;
@@ -58,8 +71,7 @@ private:
     QLineEdit *meanLE = nullptr;
     QLineEdit *varLE = nullptr;
     QLineEdit *meanPLE = nullptr;
-
-
 };
+
 
 #endif // MAINWINDOW_H

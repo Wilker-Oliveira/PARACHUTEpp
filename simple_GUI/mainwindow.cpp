@@ -12,6 +12,21 @@ MainWindow::MainWindow(QWidget *parent)
     //Variables
     ui->setupUi(this);
 
+    tabManager = new QTabWidget;
+    tabManager->addTab(new ChannelImpulseResponse, tr("Channel response"));
+
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+    mainLayout->addWidget(tabManager);
+
+    setCentralWidget(mainWidget);
+    setWindowTitle(tr("Simple GUI"));
+
+}
+
+ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
+    : QWidget(parent)
+{
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator(seed);
     std::normal_distribution<double> rand{0,0.05};
@@ -72,9 +87,9 @@ MainWindow::MainWindow(QWidget *parent)
     chartView->setRenderHint(QPainter::Antialiasing);
 
     //Refresh button logic
-    QObject::connect(m_button, &QPushButton::clicked, this, &MainWindow::recalcSeries);
+    QObject::connect(m_button, &QPushButton::clicked, this, &ChannelImpulseResponse::recalcSeries);
 
-    MainWindow::recalcSeries();
+    ChannelImpulseResponse::recalcSeries();
 
     //Positioning Setup
     QWidget *controlWidget = new QWidget(this);
@@ -98,18 +113,17 @@ MainWindow::MainWindow(QWidget *parent)
     controlLayout->addWidget(meanPLE,7,1);
     controlLayout->addWidget(m_button,8,0,1,2);
 
-    QWidget *mainWidget = new QWidget(this);
-    QHBoxLayout *mainLayout = new QHBoxLayout(mainWidget);
+    QHBoxLayout *mainLayout = new QHBoxLayout;
 
     mainLayout->addWidget(chartView);
     mainLayout->setStretch(0, 1);
     mainLayout->addWidget(controlWidget);
 
-    setCentralWidget(mainWidget);
+    setLayout(mainLayout);
 
 }
 
-void MainWindow::recalcSeries(){
+void ChannelImpulseResponse::recalcSeries(){
     series->clear();
 
     auto *x=new std::vector<float>;
@@ -186,8 +200,6 @@ void MainWindow::recalcSeries(){
     t.clear();
     delete x;
 }
-
-
 
 
 MainWindow::~MainWindow()
