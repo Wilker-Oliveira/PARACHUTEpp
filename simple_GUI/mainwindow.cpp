@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     QLabel *varLabel = new QLabel(tr("Variance of the signal: "));
     varLE->setReadOnly(true);
     varLE->setText(QString::number(0));
-    QLabel *meanPLabel = new QLabel(tr("mean Power of the signal: "));
+    QLabel *meanPLabel = new QLabel(tr("Mean power of the signal: "));
     meanPLE->setReadOnly(true);
     meanPLE->setText(QString::number(0));
 
