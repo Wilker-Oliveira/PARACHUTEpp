@@ -78,7 +78,7 @@ int main(){
     T_ACFPvec2[i]=u2.CalcACF(time[i]);
   }
 
-  /** Empirical autocorrelation of the complex envelope \f$\mu\f$*/
+  /** Empirical (theoretical) autocorrelation of the complex envelope \f$\mu\f$*/
   vector<float> T_ACFvec = envACF(0.7071, T_ACFPvec1, T_ACFPvec2);
 
   vector<float> u1value = u1.CalcProcess(time);
