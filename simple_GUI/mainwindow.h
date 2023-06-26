@@ -25,6 +25,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+//Main object Class
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -40,6 +41,7 @@ private:
 
 };
 
+//First tab related object Class
 class ChannelImpulseResponse : public QWidget
 {
     Q_OBJECT
@@ -74,6 +76,7 @@ private:
     QLineEdit *meanPLE = nullptr;
 };
 
+//Second tab object Class
 class ChannelAutoCorrelation : public QWidget
 {
     Q_OBJECT
@@ -103,6 +106,37 @@ private:
 
 };
 
+
+//Useful Function on for calculate the ACF
 std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float> acf2);
+
+//Third tab object Class
+class ChannelFrequencyResponse : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ChannelFrequencyResponse(QWidget *parent = nullptr);
+
+private:
+
+    void calcFreqRes();
+
+    //Object and widgets
+    QPushButton *m_button = nullptr;
+    QChart *chart = nullptr;
+    QChartView *chartView = nullptr;
+    QLineSeries *series = nullptr;
+
+    //Axis control
+    QValueAxis *axisX = nullptr;
+    QValueAxis *axisY = nullptr;
+
+    //Paramters
+    QLineEdit *sig = nullptr;
+    QLineEdit *fmax = nullptr;
+
+};
+
 
 #endif // MAINWINDOW_H

@@ -5,6 +5,7 @@
 #include <numeric>
 #include <algorithm>
 
+//Main Class Constructor
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -13,8 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     tabManager = new QTabWidget;
-    tabManager->addTab(new ChannelImpulseResponse, tr("Channel response"));
+    tabManager->addTab(new ChannelImpulseResponse, tr("Channel response in time"));
     tabManager->addTab(new ChannelAutoCorrelation, tr("Channel autocorrelation"));
+    tabManager->addTab(new ChannelFrequencyResponse, tr("Channel doppler spectrum"));
+
 
     QWidget *mainWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
@@ -24,13 +27,13 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr("Simple GUI"));
 
 }
-
+//Main Class Destructor
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-
+//First tab Class Constructor
 ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
     : QWidget(parent)
 {
@@ -50,7 +53,7 @@ ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
     m_button = new QPushButton("Refresh series", this);
 
     //Parameters setup
-    QLabel *sigLabel = new QLabel(tr("Standard devition: "));
+    QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
     sig->setText(QString::number(1));
     sig->setValidator( new QDoubleValidator(0, 10, 4, this) );
 
@@ -125,6 +128,7 @@ ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
 
 }
 
+//First tab Class refresh graph function
 void ChannelImpulseResponse::recalcSeries(){
     series->clear();
 
@@ -203,6 +207,7 @@ void ChannelImpulseResponse::recalcSeries(){
     delete x;
 }
 
+//Useful utility function for calculate the ACF
 std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float> acf2){
     std::vector<float> en_acf;
     float aux;
@@ -214,6 +219,7 @@ std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float>
     return en_acf;
 }
 
+//Second tab Class Constructor
 ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
     : QWidget(parent)
 {
@@ -229,8 +235,8 @@ ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
     m_button = new QPushButton("Refresh series", this);
 
     //Parameters setup
-    QLabel *sigLabel = new QLabel(tr("Standard devition: "));
-    sig->setText(QString::number(1));
+    QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
+    sig->setText(QString::number(0.7071));
     sig->setValidator( new QDoubleValidator(0, 10, 4, this) );
 
     QLabel *fmaxLabel = new QLabel(tr("Maximun doppler frequency: "));
@@ -248,7 +254,7 @@ ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
     //Chart/Chartview setup
     chart->legend()->hide();
     chart->addSeries(series);
-    chart->setTitle("I hate to admit it, but this interface really useful");
+    chart->setTitle("I hate to admit it, but this interface is really useful");
     chartView->setRenderHint(QPainter::Antialiasing);
 
     //Refresh button logic
@@ -280,6 +286,7 @@ ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
 
 }
 
+//Second tab Class refresh graph function
 void ChannelAutoCorrelation::calcCorr(){
 
     series->clear();
@@ -329,4 +336,103 @@ void ChannelAutoCorrelation::calcCorr(){
     x->clear();
     t.clear();
     delete x;
+}
+
+//Third tab Class Constructor
+ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
+    : QWidget(parent)
+{
+    //QT init
+    series = new QLineSeries();
+    sig = new QLineEdit();
+    fmax = new QLineEdit();
+
+    chart = new QChart();
+    chartView = new QChartView(chart);
+    m_button = new QPushButton("Refresh series", this);
+
+    //Parameters setup
+    QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
+    sig->setText(QString::number(0.7071));
+    sig->setValidator( new QDoubleValidator(0, 10, 4, this) );
+
+    QLabel *fmaxLabel = new QLabel(tr("Maximun doppler frequency: "));
+    fmax->setText(QString::number(21));
+    fmax->setValidator( new QDoubleValidator(10, 1000, 4, this) );
+
+    //Chart/Chartview setup
+    chart->legend()->hide();
+    chart->addSeries(series);
+    chart->setTitle("I hate to admit it, but this interface is really useful");
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    //Refresh button logic
+    QObject::connect(m_button, &QPushButton::clicked, this, &ChannelFrequencyResponse::calcFreqRes);
+
+    ChannelFrequencyResponse::calcFreqRes();
+
+    //Positioning Setup
+    QWidget *controlWidget = new QWidget(this);
+    QGridLayout *controlLayout = new QGridLayout(controlWidget);
+    controlLayout->addWidget(sigLabel,1,0);
+    controlLayout->addWidget(sig,1,1);
+    controlLayout->addWidget(fmaxLabel,2,0);
+    controlLayout->addWidget(fmax,2,1);
+
+
+    controlLayout->addWidget(m_button,8,0,1,2);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+
+    mainLayout->addWidget(chartView);
+    mainLayout->setStretch(0, 1);
+    mainLayout->addWidget(controlWidget);
+
+    setLayout(mainLayout);
+}
+
+//Third tab Class refresh graph function
+void ChannelFrequencyResponse::calcFreqRes(){
+
+    series->clear();
+
+    //init variables
+    double dt=0.01;
+    double flim=fmax->text().toDouble()+1;
+
+    std::vector<float> x (2*(flim/dt+1));
+    std::vector<float> f (2*(flim/dt+1));
+    std::vector<float> rp (2*(flim/dt+1));
+    std::vector<float> ip (2*(flim/dt+1));
+
+    MEDModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
+    MEDModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
+
+    //calc parametric PSD
+    for(int i=0;i < (2*(flim/dt+1));i++){
+        f[i]= -flim + i*dt;
+        rp[i]=u1.CalcPSD(f[i]);
+        ip[i]=u1i.CalcPSD(f[i]);
+        x[i]=rp[i]+ip[i];
+        series->append(f[i],(x[i]));
+    }
+
+    axisX=new QValueAxis;
+    axisX->setRange(-flim, flim);
+    axisX->setTickCount(10);
+    axisX->setLabelFormat("%.2f");
+    axisX->setTitleText("t(ms)");
+    chartView->chart()->setAxisX(axisX, series);
+
+    axisY=new QValueAxis;
+    axisY->setRange(*min_element(x.begin(), x.end())*1.05, *max_element(x.begin(), x.end())*1.05);
+    axisY->setTickCount(10);
+    axisY->setLabelFormat("%.2f");
+    axisY->setTitleText("channel Frequency response");
+    chartView->chart()->setAxisY(axisY, series);
+
+    rp.clear();
+    ip.clear();
+    x.clear();
+    f.clear();
 }
