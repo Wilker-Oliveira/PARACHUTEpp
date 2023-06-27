@@ -21,7 +21,7 @@ class ProcessElementaryProperties{
     fpt CalcMeanValue() const;
     fpt CalcMeanPower(const std::array<fpt,N> &pathGains) const;
     fpt CalcACF(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt tau) const;
-    fpt CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f) const;
+    fpt CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f, fpt eps) const;
     fpt CalcDopplerSpread(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies) const;
     fpt CalcPeriodicity(const std::array<fpt,N> &dopplerFrequencies) const;//TBD
     fpt CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/) const;
@@ -78,11 +78,11 @@ fpt ProcessElementaryProperties<N,fpt>::CalcACF(const std::array<fpt,N> &pathGai
  * @return the theoretical PSD value for a determinate var_f.
  */
 template<short N, typename fpt>
-fpt ProcessElementaryProperties<N,fpt>::CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f) const {
+fpt ProcessElementaryProperties<N,fpt>::CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f, fpt eps = 0.0001) const {
 
   fpt S_f = 0;
   for(int i=0; i<N; i++){
-    if(var_f == dopplerFrequencies[i] || var_f == -dopplerFrequencies[i]){
+    if(std::fabs(var_f - dopplerFrequencies[i]) <= eps || std::fabs(dopplerFrequencies[i] + var_f) <= eps){
       S_f += pow(pathGains[i],2)/4;
     }
   }

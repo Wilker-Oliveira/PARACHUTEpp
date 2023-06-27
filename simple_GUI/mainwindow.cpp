@@ -405,8 +405,8 @@ void ChannelFrequencyResponse::calcFreqRes(){
     std::vector<float> rp (2*(flim/dt+1));
     std::vector<float> ip (2*(flim/dt+1));
 
-    MEDModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
-    MEDModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
+    MEAModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
+    MEAModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
 
     //calc parametric PSD
     for(int i=0;i < (2*(flim/dt+1));i++){
