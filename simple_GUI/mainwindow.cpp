@@ -392,6 +392,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
 }
 
 //Third tab Class refresh graph function
+
 void ChannelFrequencyResponse::calcFreqRes(){
 
     series->clear();
@@ -436,3 +437,50 @@ void ChannelFrequencyResponse::calcFreqRes(){
     x.clear();
     f.clear();
 }
+
+/*
+ void ChannelFrequencyResponse::calcFreqRes(){
+
+    series->clear();
+
+    //init variables
+    double flim=fmax->text().toDouble()+1;
+\
+    MEAModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
+    MEAModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
+
+    std::vector<float> x;
+    std::vector<float> f;
+    x.reserve(40);
+    f.reserve(40);
+    std::vector<float> rp = u1.CalcDiscreteDopplerSpectrum();
+    std::vector<float> ip = u1i.CalcDiscreteDopplerSpectrum();
+
+    //calc parametric PSD
+    for(int i=0;i < (2*20);i++){
+
+        f[i]=rp[2*i];
+        x[i]=rp[1+2*i]+ip[1+2*i];
+        series->append(f[i],(x[i]));
+    }
+
+    axisX=new QValueAxis;
+    axisX->setRange(-flim, flim);
+    axisX->setTickCount(10);
+    axisX->setLabelFormat("%.2f");
+    axisX->setTitleText("t(ms)");
+    chartView->chart()->setAxisX(axisX, series);
+
+    axisY=new QValueAxis;
+    axisY->setRange(*min_element(x.begin(), x.end())*1.05, *max_element(x.begin(), x.end())*1.05);
+    axisY->setTickCount(10);
+    axisY->setLabelFormat("%.2f");
+    axisY->setTitleText("channel Frequency response");
+    chartView->chart()->setAxisY(axisY, series);
+
+    rp.clear();
+    ip.clear();
+    x.clear();
+    f.clear();
+}
+*/

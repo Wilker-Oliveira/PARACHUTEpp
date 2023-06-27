@@ -4,6 +4,7 @@
 #define PROCESSELEMETARYPROPERTIES_HPP
 
 #include <array>
+#include <vector>
 #include <numbers>
 #include <cmath>
 
@@ -22,6 +23,7 @@ class ProcessElementaryProperties{
     fpt CalcMeanPower(const std::array<fpt,N> &pathGains) const;
     fpt CalcACF(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt tau) const;
     fpt CalcPSD(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies, fpt var_f, fpt eps) const;
+    std::vector<fpt> & CalcDiscreteDopplerSpectrum(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies) const;
     fpt CalcDopplerSpread(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies) const;
     fpt CalcPeriodicity(const std::array<fpt,N> &dopplerFrequencies) const;//TBD
     fpt CalcPDF(fpt pathGain, fpt x /*calc the probability of u_i,n being x*/) const;
@@ -89,6 +91,22 @@ fpt ProcessElementaryProperties<N,fpt>::CalcPSD(const std::array<fpt,N> &pathGai
   return S_f;
 }
 
+template<short N, typename fpt>
+std::vector<fpt> & ProcessElementaryProperties<N,fpt>::CalcDiscreteDopplerSpectrum(const std::array<fpt,N> &pathGains, const std::array<fpt,N> &dopplerFrequencies) const {
+
+  std::vector<fpt> S_f;
+  S_f.reserve(2*N);
+  for(int i=0; i<N; i++){
+    S_f.push_back(-dopplerFrequencies[i]);
+    S_f.push_back(pow(pathGains[i],2)/4);
+    }
+  for(int i=0; i<N; i++){
+    S_f.push_back(dopplerFrequencies[i]);
+    S_f.push_back(pow(pathGains[i],2)/4);
+    }
+
+  return S_f;
+}
 /**
  * @brief Function for the Doppler spread of the process.
  * @brief Type: fpt.
