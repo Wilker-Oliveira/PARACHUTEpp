@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+/** Necessary Qt libraries. */
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLineEdit>
@@ -8,12 +9,14 @@
 #include <QComboBox>
 #include <QTabWidget>
 
+/** Standard C++ libraries. */
 #include <cmath>
 #include <vector>
 #include <complex>
 #include <chrono>
 #include <random>
 
+/** Channel model classes. */
 #include "../MRC_1_IS/Models/JakesModel.hpp"
 #include "../MRC_1_IS/Models/MCModel.hpp"
 #include "../MRC_1_IS/Models/MEAModel.hpp"
@@ -26,7 +29,10 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-//Main object Class
+/**
+ * @brief The MainWindow class
+ * @brief Manages all the events in the GUI.
+*/
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -36,45 +42,52 @@ public:
     ~MainWindow();
 
 private:
-
+    /**
+     * @brief tabManager
+     * @brief Creates the tabs of the GUI.
+     */
     QTabWidget *tabManager;
     Ui::MainWindow *ui;
 
 };
 
-//First tab related object Class
-class ChannelImpulseResponse : public QWidget
+/**
+ * @brief The ChannelTimeResponse class
+ * @brief Object class related to the first tab.
+ * @brief This tab shows the channel response response trhough time and the channel statistics given the chosen model and respective parameters.
+ */
+class ChannelTimeResponse : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ChannelImpulseResponse(QWidget *parent = nullptr);
+    explicit ChannelTimeResponse(QWidget *parent = nullptr);
 
 private:
 
     void recalcSeries();
 
-    //Object and widgets
+    /** Object and widgets. */
     QComboBox *funcType = nullptr;
     QPushButton *m_button = nullptr;
     QChart *chart = nullptr;
     QChartView *chartView = nullptr;
     QLineSeries *series = nullptr;
 
-    //Axis control
+    /** Axis control. */
     QValueAxis *axisX = nullptr;
     QValueAxis *axisY = nullptr;
 
-    //Paramters
-    QLineEdit *sig = nullptr;
-    QLineEdit *fmax = nullptr;
-    QLineEdit *finalTime = nullptr;
-    QLineEdit *stepTime = nullptr;
+    /** Paramters. */
+    QLineEdit *sig = nullptr;         /** Standard deviation. */
+    QLineEdit *fmax = nullptr;        /** Maximum doppler frequency. */
+    QLineEdit *finalTime = nullptr;   /** Number of coherence time. */
+    QLineEdit *stepTime = nullptr;    /** Time step. */
 
-    //Statistics
-    QLineEdit *meanLE = nullptr;
-    QLineEdit *varLE = nullptr;
-    QLineEdit *meanPLE = nullptr;
+    /** Statistics. */
+    QLineEdit *meanLE = nullptr;      /** Mean of the components. */
+    QLineEdit *varLE = nullptr;       /** Variance of the process. */
+    QLineEdit *meanPLE = nullptr;     /** Mean of the process*/
 };
 
 //Second tab object Class

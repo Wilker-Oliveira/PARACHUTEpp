@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 
 //First tab Class Constructor
-ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
+ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
     : QWidget(parent)
 {
     //QT init
@@ -59,9 +59,9 @@ ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
     chartView->setRenderHint(QPainter::Antialiasing);
 
     //Refresh button logic
-    QObject::connect(m_button, &QPushButton::clicked, this, &ChannelImpulseResponse::recalcSeries);
+    QObject::connect(m_button, &QPushButton::clicked, this, &ChannelTimeResponse::recalcSeries);
 
-    ChannelImpulseResponse::recalcSeries();
+    ChannelTimeResponse::recalcSeries();
 
     //Positioning Setup
     QWidget *controlWidget = new QWidget(this);
@@ -96,7 +96,7 @@ ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
 }
 
 //First tab Class refresh graph function
-void ChannelImpulseResponse::recalcSeries(){
+void ChannelTimeResponse::recalcSeries(){
     series->clear();
 
     auto *x=new std::vector<float>;

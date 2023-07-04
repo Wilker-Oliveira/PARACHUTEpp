@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     tabManager = new QTabWidget;
-    tabManager->addTab(new ChannelImpulseResponse, tr("Channel response in time"));
+    tabManager->addTab(new ChannelTimeResponse, tr("Channel response in time"));
     tabManager->addTab(new ChannelAutoCorrelation, tr("Channel autocorrelation"));
     tabManager->addTab(new ChannelFrequencyResponse, tr("Channel doppler spectrum"));
 
