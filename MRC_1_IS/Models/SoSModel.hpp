@@ -60,7 +60,7 @@ public:
   fpt CalcMeanPower() const;
   fpt CalcACF(fpt tau) const;
   fpt CalcPSD(fpt f) const;
-  std::vector<fpt>& CalcDiscreteDopplerSpectrum() const;
+  std::vector<fpt> CalcDiscreteDopplerSpectrum() const;
   fpt CalcDopplerSpread() const;
   //add periocity after implementation
 };
@@ -184,7 +184,7 @@ fpt SoSModel<N,fpt>::CalcPSD(fpt f) const {
 }
 
 template<short N, typename fpt>
-std::vector<fpt> & SoSModel<N,fpt>::CalcDiscreteDopplerSpectrum() const {
+std::vector<fpt> SoSModel<N,fpt>::CalcDiscreteDopplerSpectrum() const {
 
     return processProperties.CalcDiscreteDopplerSpectrum(this->pathGains, this->dopplerFrequencies);
 }

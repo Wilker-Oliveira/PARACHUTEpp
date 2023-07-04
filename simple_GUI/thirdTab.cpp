@@ -1,9 +1,11 @@
+#include "mainwindow.h"
+
 //Third tab Class Constructor
 ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     : QWidget(parent)
 {
     //QT init
-    series = new QLineSeries();
+    Parametric_series = new QScatterSeries();
     sig = new QLineEdit();
     fmax = new QLineEdit();
 
@@ -22,7 +24,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
 
     //Chart/Chartview setup
     chart->legend()->hide();
-    chart->addSeries(series);
+    chart->addSeries(Parametric_series);
     chart->setTitle("I hate to admit it, but this interface is really useful");
     chartView->setRenderHint(QPainter::Antialiasing);
 
@@ -51,62 +53,16 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     setLayout(mainLayout);
 }
 
-//Third tab Class refresh graph function
-void ChannelFrequencyResponse::calcFreqRes(){
 
-    series->clear();
-
-    //init variables
-    double dt=0.01;
-    double flim=fmax->text().toDouble()+1;
-
-    std::vector<float> x (2*(flim/dt+1));
-    std::vector<float> f (2*(flim/dt+1));
-    std::vector<float> rp (2*(flim/dt+1));
-    std::vector<float> ip (2*(flim/dt+1));
-
-    MEAModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
-    MEAModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
-
-    //calc parametric PSD
-    for(int i=0;i < (2*(flim/dt+1));i++){
-        f[i]= -flim + i*dt;
-        rp[i]=u1.CalcPSD(f[i]);
-        ip[i]=u1i.CalcPSD(f[i]);
-        x[i]=rp[i]+ip[i];
-        series->append(f[i],(x[i]));
-    }
-
-    axisX=new QValueAxis;
-    axisX->setRange(-flim, flim);
-    axisX->setTickCount(10);
-    axisX->setLabelFormat("%.2f");
-    axisX->setTitleText("t(ms)");
-    chartView->chart()->setAxisX(axisX, series);
-
-    axisY=new QValueAxis;
-    axisY->setRange(*min_element(x.begin(), x.end())*1.05, *max_element(x.begin(), x.end())*1.05);
-    axisY->setTickCount(10);
-    axisY->setLabelFormat("%.2f");
-    axisY->setTitleText("channel Frequency response");
-    chartView->chart()->setAxisY(axisY, series);
-
-    rp.clear();
-    ip.clear();
-    x.clear();
-    f.clear();
-}
-
-/*
  void ChannelFrequencyResponse::calcFreqRes(){
 
-    series->clear();
+    Parametric_series->clear();
 
     //init variables
     double flim=fmax->text().toDouble()+1;
-\
-    MEAModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
-    MEAModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
+
+    MEDModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
+    MEDModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
 
     std::vector<float> x;
     std::vector<float> f;
@@ -116,30 +72,32 @@ void ChannelFrequencyResponse::calcFreqRes(){
     std::vector<float> ip = u1i.CalcDiscreteDopplerSpectrum();
 
     //calc parametric PSD
-    for(int i=0;i < (2*20);i++){
+    for(int i=0;i < 40;i++){
 
         f[i]=rp[2*i];
-        x[i]=rp[1+2*i]+ip[1+2*i];
-        series->append(f[i],(x[i]));
+        x[i]=rp[1+2*i];
+        Parametric_series->append(f[i],(x[i]));
     }
+
+    Parametric_series->setMarkerSize(10);
 
     axisX=new QValueAxis;
     axisX->setRange(-flim, flim);
     axisX->setTickCount(10);
     axisX->setLabelFormat("%.2f");
     axisX->setTitleText("t(ms)");
-    chartView->chart()->setAxisX(axisX, series);
+    chartView->chart()->setAxisX(axisX, Parametric_series);
 
     axisY=new QValueAxis;
-    axisY->setRange(*min_element(x.begin(), x.end())*1.05, *max_element(x.begin(), x.end())*1.05);
+    //axisY->setRange(0, *max_element(x.begin(), x.end())*1.5);
+    axisY->setRange(0,0.06);
     axisY->setTickCount(10);
     axisY->setLabelFormat("%.2f");
     axisY->setTitleText("channel Frequency response");
-    chartView->chart()->setAxisY(axisY, series);
+    chartView->chart()->setAxisY(axisY, Parametric_series);
 
     rp.clear();
     ip.clear();
     x.clear();
     f.clear();
 }
-*/

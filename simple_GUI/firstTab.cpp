@@ -1,3 +1,5 @@
+#include "mainwindow.h"
+
 //First tab Class Constructor
 ChannelImpulseResponse::ChannelImpulseResponse(QWidget *parent)
     : QWidget(parent)
@@ -170,16 +172,4 @@ void ChannelImpulseResponse::recalcSeries(){
     x->clear();
     t.clear();
     delete x;
-}
-
-//Useful utility function for calculate the ACF
-std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float> acf2){
-    std::vector<float> en_acf;
-    float aux;
-
-    for(float i = 0; i< acf1.size(); i++){
-        aux = acf1[i] + acf2[i];
-        en_acf.push_back(aux);
-    }
-    return en_acf;
 }

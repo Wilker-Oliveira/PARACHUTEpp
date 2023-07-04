@@ -13,6 +13,7 @@
 #include <complex>
 #include <chrono>
 #include <random>
+
 #include "../MRC_1_IS/Models/JakesModel.hpp"
 #include "../MRC_1_IS/Models/MCModel.hpp"
 #include "../MRC_1_IS/Models/MEAModel.hpp"
@@ -92,7 +93,8 @@ private:
     QPushButton *m_button = nullptr;
     QChart *chart = nullptr;
     QChartView *chartView = nullptr;
-    QLineSeries *series = nullptr;
+    QLineSeries *Parametric_series = nullptr;
+    QLineSeries *Empiric_series = nullptr;
 
     //Axis control
     QValueAxis *axisX = nullptr;
@@ -107,8 +109,11 @@ private:
 };
 
 
-//Useful Function on for calculate the ACF
+//Useful Function on for calculate the Theoretical ACF
 std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float> acf2);
+
+//Useful Function on for calculate the Empirical ACF
+std::vector<std::complex<float>> autoCorr(std::vector<std::complex<float>> u, float lag);
 
 //Third tab object Class
 class ChannelFrequencyResponse : public QWidget
@@ -126,7 +131,7 @@ private:
     QPushButton *m_button = nullptr;
     QChart *chart = nullptr;
     QChartView *chartView = nullptr;
-    QLineSeries *series = nullptr;
+    QScatterSeries *Parametric_series = nullptr;
 
     //Axis control
     QValueAxis *axisX = nullptr;

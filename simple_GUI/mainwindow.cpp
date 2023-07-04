@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "firstTab.cpp"
-#include "secondTab.cpp"
-#include "thirdTab.cpp"
+#include "./firstTab.cpp"
+#include "./secondTab.cpp"
+#include "./thirdTab.cpp"
 
 #include <QLabel>
 #include <numeric>
