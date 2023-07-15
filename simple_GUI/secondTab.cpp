@@ -37,7 +37,7 @@ ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
     chart->legend()->hide();
     chart->addSeries(Parametric_series);
     chart->addSeries(Empiric_series);
-    chart->setTitle("I hate to admit it, but this interface is really useful");
+    chart->setTitle("Channel Autocorrelation.");
     chartView->setRenderHint(QPainter::Antialiasing);
 
     //Refresh button logic

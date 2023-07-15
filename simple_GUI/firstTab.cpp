@@ -1,23 +1,26 @@
 #include "mainwindow.h"
 
-//First tab Class Constructor
+/** First tab Class Constructor. */
 ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
     : QWidget(parent)
 {
-    //QT init
-    series = new QLineSeries();
-    sig = new QLineEdit();
-    fmax = new QLineEdit();
-    finalTime = new QLineEdit();
-    stepTime = new QLineEdit();
+    /** Parameters of the process. */
+    series = new QLineSeries();                          /** Stores the channel gains. */
+    sig = new QLineEdit();                               /** Standard deviation of the process. */
+    fmax = new QLineEdit();                              /** Maximum doppler frequency. */
+    finalTime = new QLineEdit();                         /** Number of coherence time. */
+    stepTime = new QLineEdit();                          /** Time step. */
 
-    meanLE = new QLineEdit();
-    varLE = new QLineEdit();
-    meanPLE = new QLineEdit();
-    funcType = new QComboBox;
-    chart = new QChart();
-    chartView = new QChartView(chart);
-    m_button = new QPushButton("Refresh series", this);
+    /** Statistics of the process. */
+    meanLE = new QLineEdit();                            /** Mean of the channel. */
+    varLE = new QLineEdit();                             /** Variance of the channel. */
+    meanPLE = new QLineEdit();                           /** Mean of the process. */
+
+    /** Objects of the widget. */
+    funcType = new QComboBox;                            /***/
+    chart = new QChart();                                /** Object to plot the series. */
+    chartView = new QChartView(chart);                   /** Object to visualize the plot of the series. */
+    m_button = new QPushButton("Refresh series", this);  /** Button to apply the parameters and compute the channel. */
 
     //Parameters setup
     QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
@@ -55,7 +58,7 @@ ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
     //Chart/Chartview setup
     chart->legend()->hide();
     chart->addSeries(series);
-    chart->setTitle("I'll not kill myself doing this, but i really thought about it");
+    chart->setTitle("Channel Time Response.");
     chartView->setRenderHint(QPainter::Antialiasing);
 
     //Refresh button logic

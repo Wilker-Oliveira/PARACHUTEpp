@@ -52,7 +52,7 @@ private:
 };
 
 /**
- * @brief The ChannelTimeResponse class
+ * @brief The ChannelTimeResponse class.
  * @brief Object class related to the first tab.
  * @brief This tab shows the channel response response trhough time and the channel statistics given the chosen model and respective parameters.
  */
@@ -87,10 +87,14 @@ private:
     /** Statistics. */
     QLineEdit *meanLE = nullptr;      /** Mean of the components. */
     QLineEdit *varLE = nullptr;       /** Variance of the process. */
-    QLineEdit *meanPLE = nullptr;     /** Mean of the process*/
+    QLineEdit *meanPLE = nullptr;     /** Mean of the process.*/
 };
 
-//Second tab object Class
+/**
+ * @brief The ChannelAutoCorrelation class.
+ * @brief Object related to the second tab.
+ * @brief This tabs shows the channel's parametrical and empirical autocorrelation.
+ */
 class ChannelAutoCorrelation : public QWidget
 {
     Q_OBJECT
@@ -102,33 +106,48 @@ private:
 
     void calcCorr();
 
-    //Object and widgets
+    /** Object and widgets. */
     QPushButton *m_button = nullptr;
     QChart *chart = nullptr;
     QChartView *chartView = nullptr;
     QLineSeries *Parametric_series = nullptr;
     QLineSeries *Empiric_series = nullptr;
 
-    //Axis control
+    /** Axis control. */
     QValueAxis *axisX = nullptr;
     QValueAxis *axisY = nullptr;
 
-    //Paramters
-    QLineEdit *sig = nullptr;
-    QLineEdit *fmax = nullptr;
-    QLineEdit *finalTime = nullptr;
-    QLineEdit *stepTime = nullptr;
+    /** Paramters. */
+    QLineEdit *sig = nullptr;          /** Standard deviation. */
+    QLineEdit *fmax = nullptr;         /** Maximum doppler frequency. */
+    QLineEdit *finalTime = nullptr;    /** Number of coherence time. */
+    QLineEdit *stepTime = nullptr;     /** Time step. */
 
 };
 
 
-//Useful Function on for calculate the Theoretical ACF
+/**
+ * @brief envACF function that computes the theoretical autocorrelation.
+ * @param sig float, standard deviation of the channel.
+ * @param acf1 vector of floats, autocorrelation of the real component of the process.
+ * @param acf2 vector of floats, autocorrelation of the imaginary component of the process.
+ * @return vector of floats containing the autocorrelation of the process.
+ */
 std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float> acf2);
 
-//Useful Function on for calculate the Empirical ACF
+/**
+ * @brief autoCorr function that computes the empirical autocorrelation.
+ * @param u vector of complex floats, the channel realization.
+ * @param lag float, delay between time instants.
+ * @return vector of complex floats containing the autocorrelation of the process.
+ */
 std::vector<std::complex<float>> autoCorr(std::vector<std::complex<float>> u, float lag);
 
-//Third tab object Class
+/**
+ * @brief The ChannelFrequencyResponse class.
+ * @brief Object class relative to the third tab.
+ * @brief This tab shows the plot of the doppler frequency spectrum.
+ */
 class ChannelFrequencyResponse : public QWidget
 {
     Q_OBJECT
@@ -140,19 +159,19 @@ private:
 
     void calcFreqRes();
 
-    //Object and widgets
+    /** Object and widgets. */
     QPushButton *m_button = nullptr;
     QChart *chart = nullptr;
     QChartView *chartView = nullptr;
     QScatterSeries *Parametric_series = nullptr;
 
-    //Axis control
+    /** Axis control. */
     QValueAxis *axisX = nullptr;
     QValueAxis *axisY = nullptr;
 
-    //Paramters
-    QLineEdit *sig = nullptr;
-    QLineEdit *fmax = nullptr;
+    /** Paramters. */
+    QLineEdit *sig = nullptr;          /** Standard deviation. */
+    QLineEdit *fmax = nullptr;         /** Maximum doppler frequency. */
 
 };
 
