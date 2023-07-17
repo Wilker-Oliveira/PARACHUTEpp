@@ -25,7 +25,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     //Chart/Chartview setup
     chart->legend()->hide();
     chart->addSeries(Parametric_series);
-    chart->setTitle("I hate to admit it, but this interface is really useful");
+    chart->setTitle("Channel Doppler Spectrum.");
     chartView->setRenderHint(QPainter::Antialiasing);
 
     //Refresh button logic
