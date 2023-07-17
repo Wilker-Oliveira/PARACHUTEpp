@@ -59,12 +59,12 @@ public:
  
     float scale=sig/(std::sqrt(N - 0.5));
 
-    for(short n=0;n<N-1;n++)
-      this->dopplerFrequencies[n] = fmax*std::cos(M_PI*(n+1)/((2*N)-1));
+    for(float n=0;n<N-1;n++)
+      this->dopplerFrequencies[n] = fmax*std::cos(M_PI*(n+1.0)/((2*N)-1));
     this->dopplerFrequencies[N-1] = fmax;
 
-    for(short n=0;n<N-1;n++)
-      this->pathGains[n] = (2*scale)*std::sin(M_PI*(n+1)/(N-1));  
+    for(float n=0;n<N-1;n++)
+      this->pathGains[n] = (2*scale)*std::sin(M_PI*(n+1.0)/(N-1));
     this->pathGains[N-1] = scale;
   }
 
@@ -79,12 +79,12 @@ public:
     
     float scale=sig/(std::sqrt(N - 0.5));
 
-    for(short n=0;n<N-1;n++)
-      this->dopplerFrequencies[n] = fmax*std::cos(M_PI*(n+1)/((2*N)-1));    
+    for(float n=0;n<N-1;n++)
+      this->dopplerFrequencies[n] = fmax*std::cos(M_PI*(n+1.0)/((2*N)-1));
     this->dopplerFrequencies[N-1] = fmax;
 
-    for(short n=0;n<N-1;n++)
-      this->pathGains[n] =  (2*scale)* std::cos((M_PI*(n+1))/(N-1));
+    for(float n=0;n<N-1;n++)
+      this->pathGains[n] =  (2*scale)* std::cos((M_PI*(n+1.0))/(N-1));
     this->pathGains[N-1] = scale;
   }
   

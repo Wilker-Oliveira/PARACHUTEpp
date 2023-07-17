@@ -6,6 +6,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
 {
     /** Parameters of the process. */
     Parametric_series = new QScatterSeries();               /** @brief Parametric_Series stores the parametric doppler spectrum of the channel. */
+    Empiric_series = new QScatterSeries();
     sig = new QLineEdit();                                  /** @brief sig Standard deviation of the process. */
     fmax = new QLineEdit();                                 /** @brief fmax Maximum doppler frequency. */
 
@@ -27,6 +28,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     /** Setup of the chart view. */
     chart->legend()->hide();                                            /** Hides the legend of the figure. */
     chart->addSeries(Parametric_series);                                /** Adds the parametric doppler spectrum graph to the figure. */
+    chart->addSeries(Empiric_series);
     chart->setTitle("Channel Doppler Spectrum.");                       /** Sets the title of the figure. */
     chartView->setRenderHint(QPainter::Antialiasing);
 
@@ -71,6 +73,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
 
     /** Clear the series. */
     Parametric_series->clear();
+    Empiric_series->clear();
 
     /**
      * @brief Iniciating the variables necessary for the computation of the doppler spectrum.
@@ -79,14 +82,14 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     double flim=fmax->text().toDouble()+1;
 
     MEDModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MED model. */
-    MEDModel<21,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MED model. */
+    MEDModel<20,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MED model. */
 
     std::vector<float> x;                                                    /** @brief x vector of floats, stores the values of the x axis. */
     std::vector<float> f;                                                    /** @brief f vector of floats, stores the values of the y axis. */
 
     /** Set size of the vectors. */
-    x.reserve(40);
-    f.reserve(40);
+    x.reserve(80);
+    f.reserve(80);
 
     std::vector<float> rp = u1.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
     std::vector<float> ip = u1i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
@@ -95,6 +98,12 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     for(int i=0;i < 40;i++){
 
         f[i]=rp[2*i];
+        x[i]=rp[1+2*i];
+        Parametric_series->append(f[i],(x[i]));               /** Adds the discrete doppler spectrum values in the series. */
+    }
+    for(int i=40;i < 80;i++){
+
+        f[i]=ip[2*i];
         x[i]=ip[1+2*i];
         Parametric_series->append(f[i],(x[i]));               /** Adds the discrete doppler spectrum values in the series. */
     }
@@ -111,8 +120,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
 
     /** Setup of the vertical axis of the plot. */
     axisY=new QValueAxis;
-    //axisY->setRange(0, *max_element(x.begin(), x.end())*1.5);
-    axisY->setRange(0,0.06);
+    axisY->setRange(*min_element(x.begin(), x.end())*0.95, *max_element(x.begin(), x.end())*2.8);
     axisY->setTickCount(10);
     axisY->setLabelFormat("%.2f");
     axisY->setTitleText("Channel frequency response");

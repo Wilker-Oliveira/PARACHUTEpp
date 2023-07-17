@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 /** Necessary Qt libraries. */
+#include <fftw3.h>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLineEdit>
@@ -143,6 +144,8 @@ std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float>
  */
 std::vector<std::complex<float>> autoCorr(std::vector<std::complex<float>> u, float lag);
 
+void fft_shift(std::complex<double>* A, unsigned long size);
+
 /**
  * @brief The ChannelFrequencyResponse class.
  * @brief Object class relative to the third tab.
@@ -164,6 +167,7 @@ private:
     QChart *chart = nullptr;
     QChartView *chartView = nullptr;
     QScatterSeries *Parametric_series = nullptr;
+    QScatterSeries *Empiric_series = nullptr;
 
     /** Axis control. */
     QValueAxis *axisX = nullptr;

@@ -111,8 +111,8 @@ void ChannelAutoCorrelation::calcCorr(){
     std::vector<float> ip (s_length+1);       /** @brief rp a vector of floats, stores the imaginary process component. */
 
 
-    MEAModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MEA model. */
-    MEAModel<22,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MEA model. */
+    MEDModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MEA model. */
+    MEDModel<22,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MEA model. */
 
     /** Computes the parametric autocorrelation. */
     for(int i=0;i<s_length;i++){
