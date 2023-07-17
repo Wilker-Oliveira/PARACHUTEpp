@@ -1,51 +1,61 @@
 #include "mainwindow.h"
 
-//Second tab Class Constructor
+/** First tab Class Constructor. */
 ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
     : QWidget(parent)
 {
-    //QT init
-    Parametric_series = new QLineSeries();
-    Empiric_series = new QLineSeries();
-    sig = new QLineEdit();
-    fmax = new QLineEdit();
-    finalTime = new QLineEdit();
-    stepTime = new QLineEdit();
+    /** Parameters of the process. */
+    Parametric_series = new QLineSeries();               /** Stores the parametric autocorrelation of the channel. */
+    Empiric_series = new QLineSeries();                  /** Stores the empiric autocorrelation of the channel. */
+    sig = new QLineEdit();                               /** Standard deviation of the process. */
+    fmax = new QLineEdit();                              /** Maximum doppler frequency. */
+    finalTime = new QLineEdit();                         /** Number of coherence time. */
+    stepTime = new QLineEdit();                          /** Time step. */
 
+    /** Objects of the widget. */
     chart = new QChart();
     chartView = new QChartView(chart);
     m_button = new QPushButton("Refresh series", this);
 
-    //Parameters setup
+    /** Setup of the Standard Deviation parameter.*/
     QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
-    sig->setText(QString::number(0.7071));
-    sig->setValidator( new QDoubleValidator(0, 10, 4, this) );
+    sig->setText(QString::number(0.7071));                              /** Iniciates the standard deviation in 0.7071 */
+    sig->setValidator( new QDoubleValidator(0, 10, 4, this) );          /** Restricts the input value.*/
 
+    /** Setup of the Maximum Doppler Frequency. */
     QLabel *fmaxLabel = new QLabel(tr("Maximum doppler frequency: "));
-    fmax->setText(QString::number(91));
-    fmax->setValidator( new QDoubleValidator(10, 1000, 4, this) );
+    fmax->setText(QString::number(91));                                 /** Iniciates the maximum doppler frequency in 91 */
+    fmax->setValidator( new QDoubleValidator(10, 1000, 4, this) );      /** Restricts the input value. */
 
+    /** Setup of the Coherence Time Number. */
     QLabel *finalLabel = new QLabel(tr("Number of coherence time: "));
-    finalTime->setText(QString::number(5));
-    finalTime->setValidator( new QDoubleValidator(1, 100, 3, this) );
+    finalTime->setText(QString::number(5));                             /** Iniciates the coherence time number in 5. */
+    finalTime->setValidator( new QDoubleValidator(1, 100, 3, this) );   /** Restricts the input value. */
 
+    /** Setup of the Step Time*/
     QLabel *stepLabel = new QLabel(tr("Step time: "));
-    stepTime->setText(QString::number(0.0005));
-    stepTime->setValidator( new QDoubleValidator(0.1, 10, 6, this) );
+    stepTime->setText(QString::number(0.0005));                         /** Iniciates the step time in 0.0005 seconds. */
+    stepTime->setValidator( new QDoubleValidator(0.1, 10, 6, this) );   /** Restricts the input value. */
 
-    //Chart/Chartview setup
-    chart->legend()->hide();
-    chart->addSeries(Parametric_series);
-    chart->addSeries(Empiric_series);
-    chart->setTitle("Channel Autocorrelation.");
+    /** Setup of the chart view. */
+    chart->legend()->hide();                                            /** Hides the legend of the figure. */
+    chart->addSeries(Parametric_series);                                /** Adds the parametric autocorrelation graph to the figure. */
+    chart->addSeries(Empiric_series);                                   /** Adds the empiric autocorrelation graph to the figure. */
+    chart->setTitle("Channel Autocorrelation.");                        /** Sets the title of the figure. */
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    //Refresh button logic
+    /** Creating a connection to the refresh button to recalculate the autocorrelation when clicked. */
     QObject::connect(m_button, &QPushButton::clicked, this, &ChannelAutoCorrelation::calcCorr);
 
+    /**
+     * @brief Declaring the function calcCorr.
+     */
     ChannelAutoCorrelation::calcCorr();
 
-    //Positioning Setup
+    /**
+     * @brief controlWidget, object that ...
+     * @brief controlLayout, object that manages the position of the objects in the widget.
+     */
     QWidget *controlWidget = new QWidget(this);
     QGridLayout *controlLayout = new QGridLayout(controlWidget);
     controlLayout->addWidget(sigLabel,1,0);
@@ -59,6 +69,9 @@ ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
 
     controlLayout->addWidget(m_button,8,0,1,2);
 
+    /**
+     * @brief mainLayout object that disposes the widgets horizontally inside the window.
+     */
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
     mainLayout->addWidget(chartView);
@@ -69,94 +82,98 @@ ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
 
 }
 
-//Second tab Class refresh graph function
+/**
+ * @brief calcCorr, function that refreshes the channel and the autocorrelations.
+ */
 void ChannelAutoCorrelation::calcCorr(){
 
+    /** Clear the series. */
     Parametric_series->clear();
     Empiric_series->clear();
 
-    //init variables
+    /**
+     *  @brief Iniciating variables to store the means of the channel and the process, and the variance of the channel.
+     *  Receives the input values of the parameters.
+     */
     double ti=0,tf=finalTime->text().toFloat(),dt=stepTime->text().toFloat();
     double cohtime=1/fmax->text().toDouble();
 
+    /** Time length. */
     double s_lenght=ceil((tf*cohtime)/dt);
 
-    auto *x=new std::vector<float>;
-    std::vector<float> t (s_lenght+1);
-    std::vector<float> rp (s_lenght+1);
-    std::vector<float> ip (s_lenght+1);
+    auto *x=new std::vector<float>;           /** ??? */
+    std::vector<float> t (s_lenght+1);        /** Time vector. */
+    std::vector<float> rp (s_lenght+1);       /** Vector to store the real process. */
+    std::vector<float> ip (s_lenght+1);       /** Vector to store the imaginary process. */
 
 
-    MEAModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());
-    MEAModel<22,float> u1i(sig->text().toDouble(),fmax->text().toDouble());
+    MEAModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MEA model. */
+    MEAModel<22,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MEA model. */
 
-    //calc Theoretical Corr
+    /** Computes the parametric autocorrelation. */
     for(int i=0;i<s_lenght;i++){
-        t[i]=ti + i*dt;
-        rp[i]=u1.CalcACF(t[i]);
-        ip[i]=u1i.CalcACF(t[i]);
+        t[i]=ti + i*dt;            /** Time instant. */
+        rp[i]=u1.CalcACF(t[i]);    /** Autocorrelation of the real process component. */
+        ip[i]=u1i.CalcACF(t[i]);   /** Autocorrelation of the imaginary process component. */
     }
-    *x=envACF(sig->text().toDouble(),rp,ip);
+    *x=envACF(sig->text().toDouble(),rp,ip);  /** Autocorrelation of the complex envelope. */
 
     for(int i=0; i<=s_lenght-1; i++){
-        Parametric_series->append(t[i],(x->at(i)));
+        Parametric_series->append(t[i],(x->at(i)));  /** Adds the autocorrelation values to the series. */
     }
     Parametric_series->setName(QString("Parametric autocorrelation"));
 
 
-    std::vector<float> u1value = u1.CalcProcess(t);
-    std::vector<float> u2value = u1i.CalcProcess(t);
+    std::vector<float> u1value = u1.CalcProcess(t);    /** Computes the real process. */
+    std::vector<float> u2value = u1i.CalcProcess(t);   /** Computes the imaginary process. */
 
-    std::vector<std::complex<float>> S_ACFvec;    // vector to store the empirical autocorrelation values
-    std::vector<std::complex<float>> uvalue,aux;
-    std::complex<float> ch;
+    std::vector<std::complex<float>> S_ACFvec;         /** Vector to store the empirical autocorrelation values. */
+    std::vector<std::complex<float>> uvalue,aux;       /** Vector of the channel realizations. */
+    std::complex<float> ch;                            /** Vector to store the channel values. */
 
     for(int i = 0; i < u1value.size(); i++){
-        ch = std::complex<float>(u1value[i], u2value[i]);
+        ch = std::complex<float>(u1value[i], u2value[i]); /** Computes and stores the channel values. */
         uvalue.push_back(ch);
     }
 
-    S_ACFvec = autoCorr(uvalue,s_lenght+1);
-    uvalue.clear();
+    S_ACFvec = autoCorr(uvalue,s_lenght+1);    /** Takes the empiric autocorrelation of the channel. */
+    uvalue.clear();                            /** Clear complex envelope vector. */
 
     /**Taking the mean of the empirical autocorrelation function.*/
 
+    /** Autocorrelation of 200 realizations. */
     for(int i =0;i<200;i++){
-        // Generate the random phases
+        /** Generate the random phases */
         u1.genPhases();
         u1i.genPhases();
 
-        // Compute the processes
-        u1value = u1.CalcProcess(t);
-        u2value = u1i.CalcProcess(t);
+        u1value = u1.CalcProcess(t);       /** Computes the real process. */
+        u2value = u1i.CalcProcess(t);      /** Computes the imaginary process. */
 
-        // Generate the complex envelope
+        /** Generate the complex envelope */
         for(int i = 0; i < u1value.size(); i++){
-            ch = std::complex<float>(u1value[i], u2value[i]);
+            ch = std::complex<float>(u1value[i], u2value[i]); /** Computes and stores the channel values. */
             uvalue.push_back(ch);
         }
 
-        // Compute the empirical autocorrelation in auxiliar vector
-        aux = autoCorr(uvalue,s_lenght+1);
+        aux = autoCorr(uvalue,s_lenght+1); /** Takes the empiric autocorrelation of the channel in auxiliar vector. */
 
-        // Clear complex envelope vector
-        uvalue.clear();
+        uvalue.clear(); /** Clear complex envelope vector. */
 
-        // Store the autocorrelation function result
         for(float j=0;j<s_lenght+1;j++){
-            S_ACFvec[j]= (S_ACFvec[j]+aux[j]);
+            S_ACFvec[j]= (S_ACFvec[j]+aux[j]); /** Stores the autocorrelation of the channel. */
         }
 
-        // Clear auxiliar vector
-        aux.clear();
+        aux.clear(); /** Clear auxiliar vector. */
     }
 
-    double s_norm = std::real(S_ACFvec[0]);
+    double s_norm = std::real(S_ACFvec[0]);                             /** Takes the norm as the real part of the first value of the autocorrelation. */
     for(int i=0; i<=s_lenght-1; i++){
-        Empiric_series->append(t[i],std::real(S_ACFvec[i])/s_norm);
+        Empiric_series->append(t[i],std::real(S_ACFvec[i])/s_norm);     /** Adds the normalized autocorrelation values to the series. */
     }
     Empiric_series->setName(QString("Empiric autocorrelation with 200 realizations"));
 
+    /** Setup of the horizontal axis of the plot. */
     axisX=new QValueAxis;
     axisX->setRange(0, tf*cohtime);
     axisX->setTickCount(10);
@@ -165,6 +182,7 @@ void ChannelAutoCorrelation::calcCorr(){
     chartView->chart()->setAxisX(axisX, Parametric_series);
     chartView->chart()->setAxisX(axisX, Empiric_series);
 
+    /** Setup of the vertical axis of the plot. */
     axisY=new QValueAxis;
     axisY->setRange(*min_element(x->begin(), x->end())*1.05, *max_element(x->begin(), x->end())*1.05);
     axisY->setTickCount(10);
@@ -174,6 +192,7 @@ void ChannelAutoCorrelation::calcCorr(){
     chartView->chart()->setAxisY(axisY, Empiric_series);
     chartView->chart()->legend()->setVisible(true);
 
+    /** Clearing the variables and objects of the widget.*/
     rp.clear();
     ip.clear();
     x->clear();
@@ -181,7 +200,13 @@ void ChannelAutoCorrelation::calcCorr(){
     delete x;
 }
 
-//Useful utility function for calculate the Theoretical ACF
+/**
+ * @brief envACF function that computes the theoretical autocorrelation.
+ * @param sig float, standard deviation of the channel.
+ * @param acf1 vector of floats, autocorrelation of the real component of the process.
+ * @param acf2 vector of floats, autocorrelation of the imaginary component of the process.
+ * @return vector of floats containing the autocorrelation of the process.
+ */
 std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float> acf2){
     std::vector<float> en_acf;
     float aux;
@@ -193,8 +218,12 @@ std::vector<float> envACF(float sig, std::vector<float> acf1, std::vector<float>
     return en_acf;
 }
 
-//Useful utility function for calculate the Empirical ACF
-//The output of this function is unormalized!!!!
+/**
+ * @brief autoCorr function that computes the unormalized empirical autocorrelation.
+ * @param u vector of complex floats, the channel realization.
+ * @param lag float, delay between time instants.
+ * @return vector of complex floats containing the autocorrelation of the process.
+ */
 std::vector<std::complex<float>> autoCorr(std::vector<std::complex<float>> u, float lag){
 
     std::complex<float> aux (0.0, 0.0);
