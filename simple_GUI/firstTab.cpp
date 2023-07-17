@@ -5,16 +5,16 @@ ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
     : QWidget(parent)
 {
     /** Parameters of the process. */
-    series = new QLineSeries();                          /** Stores the channel gains. */
-    sig = new QLineEdit();                               /** Standard deviation of the process. */
-    fmax = new QLineEdit();                              /** Maximum doppler frequency. */
-    finalTime = new QLineEdit();                         /** Number of coherence time. */
-    stepTime = new QLineEdit();                          /** Time step. */
+    series = new QLineSeries();                          /** @brief series Stores the channel gains. */
+    sig = new QLineEdit();                               /** @brief sig Standard deviation of the process. */
+    fmax = new QLineEdit();                              /** @brief fmax Maximum doppler frequency. */
+    finalTime = new QLineEdit();                         /** @brief finalTime Number of coherence time. */
+    stepTime = new QLineEdit();                          /** @brief stepTime Time step. */
 
     /** Statistics of the process. */
-    meanLE = new QLineEdit();                            /** Mean of the channel. */
-    varLE = new QLineEdit();                             /** Variance of the channel. */
-    meanPLE = new QLineEdit();                           /** Mean of the process. */
+    meanLE = new QLineEdit();                            /** @brief meanLE Mean of the channel. */
+    varLE = new QLineEdit();                             /** @brief varLE Variance of the channel. */
+    meanPLE = new QLineEdit();                           /** @brief meanPLE Mean of the process. */
 
     /** Objects of the widget. */
     funcType = new QComboBox;                            /***/
@@ -24,8 +24,8 @@ ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
 
     /** Setup of the Standard Deviation parameter.*/
     QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
-    sig->setText(QString::number(1));                              /** Iniciates the standard deviation in 1 */
-    sig->setValidator( new QDoubleValidator(0, 10, 4, this) );     /** Restricts the input value.*/
+    sig->setText(QString::number(1));                                   /** Iniciates the standard deviation in 1 */
+    sig->setValidator( new QDoubleValidator(0, 10, 4, this) );          /** Restricts the input value.*/
 
     /** Setup of the Maximum Doppler Frequency. */
     QLabel *fmaxLabel = new QLabel(tr("Maximum doppler frequency: "));
@@ -37,7 +37,7 @@ ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
     finalTime->setText(QString::number(5));                             /** Iniciates the coherence time number in 5. */
     finalTime->setValidator( new QDoubleValidator(1, 100, 3, this) );   /** Restricts the input value. */
 
-    /** Setup of the Step Time*/
+    /** Setup of the Step Time. */
     QLabel *stepLabel = new QLabel(tr("Step time: "));
     stepTime->setText(QString::number(0.0001));                         /** Iniciates the step time in 0.0001 seconds. */
     stepTime->setValidator( new QDoubleValidator(0.1, 10, 6, this) );   /** Restricts the input value. */
@@ -131,18 +131,23 @@ ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
 void ChannelTimeResponse::recalcSeries(){
     series->clear();                 /** Clear the series. */
 
-    auto *x=new std::vector<float>;  /** ??? */
-    std::vector<float> rp;           /** Vector to store the real process component. */
-    std::vector<float> ip;           /** Vector to store the imaginary process component. */
+    auto *x=new std::vector<float>;  /** @brief x a pointer, vector of floats that stores the values of the x axis. */
+    std::vector<float> rp;           /** @brief rp a vector of floats, stores the real process component. */
+    std::vector<float> ip;           /** @brief ip a vector of floats, stores the imaginary process component. */
 
     /**
-     *  @brief Iniciating variables to store the means of the channel and the process, and the variance of the channel.
-     *  Receives the input values of the parameters.
+     *  @brief Iniciating variables.
+     *  @brief mean a double, the mean value of the channel.
+     *  @brief var a double, the variance of the channel.
+     *  @brief meanP a double, the mean value of the process.
+     *  @brief ti a double, the time instant.
+     *  @brief dt a double, the time step.
+     *  @brief cohtime a double, the coherence time of the process.
      */
     double mean = 0,var = 0, meanP=0,ti=0,tf=finalTime->text().toFloat(),dt=stepTime->text().toFloat();
     double cohtime=1/fmax->text().toDouble();
 
-    /** Time vector. */
+    /** @brief t a vector of floats, the time vector. */
     std::vector<float> t ((tf*cohtime)/dt +1);
 
     for(int i=0;i<(tf*cohtime)/dt;i++) t[i]=ti + i*dt;
