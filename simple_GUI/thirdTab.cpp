@@ -81,32 +81,27 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
      */
     double flim=fmax->text().toDouble()+1;
 
-    MEDModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MED model. */
-    MEDModel<20,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MED model. */
+    MEDModel<25,double> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MED model. */
+    MEDModel<25,double> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MED model. */
 
-    std::vector<float> x;                                                    /** @brief x vector of floats, stores the values of the x axis. */
-    std::vector<float> f;                                                    /** @brief f vector of floats, stores the values of the y axis. */
+    std::vector<double> x;                                                    /** @brief x vector of floats, stores the values of the x axis. */
+    std::vector<double> f;                                                    /** @brief f vector of floats, stores the values of the y axis. */
 
     /** Set size of the vectors. */
-    x.reserve(80);
-    f.reserve(80);
+    x.reserve(50);
+    f.reserve(50);
 
-    std::vector<float> rp = u1.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
-    std::vector<float> ip = u1i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
+    std::vector<double> rp = u1.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
+    std::vector<double> ip = u1i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
 
     /** Computes the Parametric PSD. */
-    for(int i=0;i < 40;i++){
+    for(int i=0;i < rp.size()/2;i++){
 
         f[i]=rp[2*i];
-        x[i]=rp[1+2*i];
+        x[i]=2*rp[1+2*i];
         Parametric_series->append(f[i],(x[i]));               /** Adds the discrete doppler spectrum values in the series. */
     }
-    for(int i=40;i < 80;i++){
 
-        f[i]=ip[2*i];
-        x[i]=ip[1+2*i];
-        Parametric_series->append(f[i],(x[i]));               /** Adds the discrete doppler spectrum values in the series. */
-    }
 
     Parametric_series->setMarkerSize(10);
 
@@ -115,7 +110,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     axisX->setRange(-flim, flim);
     axisX->setTickCount(10);
     axisX->setLabelFormat("%.2f");
-    axisX->setTitleText("t(ms)");
+    axisX->setTitleText("f(Hz)");
     chartView->chart()->setAxisX(axisX, Parametric_series);
 
     /** Setup of the vertical axis of the plot. */

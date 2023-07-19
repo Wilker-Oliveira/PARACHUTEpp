@@ -72,6 +72,9 @@ ChannelTimeResponse::ChannelTimeResponse(QWidget *parent)
     QLabel *funcLabel = new QLabel(tr("Choose the model: "));
     funcType->addItem(tr("MED model"));
     funcType->addItem(tr("MEDS model"));
+    funcType->addItem(tr("MSE model"));
+    funcType->addItem(tr("MEA model"));
+    funcType->addItem(tr("MCM model"));
 
     /** Setup of the chart view. */
     chart->legend()->hide();                            /** Hides the legend of the figure. */
@@ -158,6 +161,15 @@ void ChannelTimeResponse::recalcSeries(){
     MEDSModel<20,float> u2(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
     MEDSModel<21,float> u2i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
 
+    MSEModel<20,float> u3(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
+    MSEModel<21,float> u3i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
+
+    MEAModel<20,float> u4(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
+    MEAModel<21,float> u4i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
+
+    MCModel<20,float> u5(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
+    MCModel<21,float> u5i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
+
     /** If the chosen model is the MED. */
     if (funcType->currentText()==("MED model")){
         rp=u1.CalcProcess(t);                                            /** Computles the real process. */
@@ -166,13 +178,42 @@ void ChannelTimeResponse::recalcSeries(){
             x->push_back(std::abs(std::complex<double>(rp[i],ip[i])));   /** Computes channel gain and adds it to the vector object. */
             series->append(t[i],10*log10(x->at(i)));                     /** Converts the gains to dB and includes includes it in the series. */
         }
-
-
     }
+
     /** If the chosen model is the MEDS. */
-    else {
+    else if (funcType->currentText()==("MEDS model")){
         rp=u2.CalcProcess(t);                                            /** Computles the real process. */
         ip=u2i.CalcProcess(t);                                           /** Computes the imaginary process. */
+        for(int i=0; i<=tf*cohtime/dt; i++){
+            x->push_back(std::abs(std::complex<double>(rp[i],ip[i])));   /** Computes channel gain and adds it to the vector object. */
+            series->append(t[i],10*log10(x->at(i)));                     /** Converts the gains to dB and includes includes it in the series. */
+        }
+    }
+
+    /** If the chosen model is the MSE. */
+    else if (funcType->currentText()==("MSE model")){
+        rp=u3.CalcProcess(t);                                            /** Computles the real process. */
+        ip=u3i.CalcProcess(t);                                           /** Computes the imaginary process. */
+        for(int i=0; i<=tf*cohtime/dt; i++){
+            x->push_back(std::abs(std::complex<double>(rp[i],ip[i])));   /** Computes channel gain and adds it to the vector object. */
+            series->append(t[i],10*log10(x->at(i)));                     /** Converts the gains to dB and includes includes it in the series. */
+        }
+    }
+
+    /** If the chosen model is the MEA. */
+    else if (funcType->currentText()==("MEA model")){
+        rp=u4.CalcProcess(t);                                            /** Computles the real process. */
+        ip=u4i.CalcProcess(t);                                           /** Computes the imaginary process. */
+        for(int i=0; i<=tf*cohtime/dt; i++){
+            x->push_back(std::abs(std::complex<double>(rp[i],ip[i])));   /** Computes channel gain and adds it to the vector object. */
+            series->append(t[i],10*log10(x->at(i)));                     /** Converts the gains to dB and includes includes it in the series. */
+        }
+    }
+
+    /** If the chosen model is the MCM. */
+    else {
+        rp=u5.CalcProcess(t);                                            /** Computles the real process. */
+        ip=u5i.CalcProcess(t);                                           /** Computes the imaginary process. */
         for(int i=0; i<=tf*cohtime/dt; i++){
             x->push_back(std::abs(std::complex<double>(rp[i],ip[i])));   /** Computes channel gain and adds it to the vector object. */
             series->append(t[i],10*log10(x->at(i)));                     /** Converts the gains to dB and includes includes it in the series. */

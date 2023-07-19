@@ -47,7 +47,7 @@ public:
   for(short n=0;n<N;n++) this->dopplerFrequencies[n]= (fmax*(2*(n+1)-1))/(2*N);
   
   for(short n=0;n<N;n++){ 
-    this->pathGains[n]= ((2*sig)/sqrt(M_PI))* sqrt(asin(((float)n+1)/N)-asin(((float)n)/N));
+    this->pathGains[n]= ((2*sig)/sqrt(M_PI))* sqrt(asin(((double)n+1)/N)-asin(((double)n)/N));
   }
 
 }

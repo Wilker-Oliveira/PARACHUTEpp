@@ -122,8 +122,10 @@ void ChannelAutoCorrelation::calcCorr(){
     }
     *x=envACF(sig->text().toDouble(),rp,ip);  /** Autocorrelation of the complex envelope. */
 
+    double s_norm = x->at(0);
     for(int i=0; i<=s_length-1; i++){
-        Parametric_series->append(t[i],(x->at(i)));  /** Adds the autocorrelation values to the series. */
+        Parametric_series->append(t[i],(x->at(i))/s_norm);  /** Adds the autocorrelation values to the series. */
+        x->at(i)/=s_norm;
     }
     Parametric_series->setName(QString("Parametric autocorrelation"));
 
@@ -169,7 +171,7 @@ void ChannelAutoCorrelation::calcCorr(){
         aux.clear(); /** Clear auxiliar vector. */
     }
 
-    double s_norm = std::real(S_ACFvec[0]);                             /** Takes the norm as the real part of the first value of the autocorrelation. */
+    s_norm = std::real(S_ACFvec[0]);                             /** Takes the norm as the real part of the first value of the autocorrelation. */
     for(int i=0; i<=s_length-1; i++){
         Empiric_series->append(t[i],std::real(S_ACFvec[i])/s_norm);     /** Adds the normalized autocorrelation values to the series. */
     }
