@@ -11,6 +11,7 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     fmax = new QLineEdit();                                 /** @brief fmax Maximum doppler frequency. */
 
     /** Objects of the widget. */
+    funcType = new QComboBox;                            /***/
     chart = new QChart();
     chartView = new QChartView(chart);
     m_button = new QPushButton("Refresh series", this);
@@ -24,6 +25,16 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     QLabel *fmaxLabel = new QLabel(tr("Maximum doppler frequency: "));
     fmax->setText(QString::number(91));                                 /** Iniciates the maximum doppler frequency in 21 */
     fmax->setValidator( new QDoubleValidator(10, 1000, 4, this) );      /** Restricts the input value. */
+
+    /**
+     * @brief Setup of the ComboBox, shows the methods of calculating the process available for choice.
+     */
+    QLabel *funcLabel = new QLabel(tr("Choose the model: "));
+    funcType->addItem(tr("MED model"));
+    funcType->addItem(tr("MEDS model"));
+    funcType->addItem(tr("MSE model"));
+    funcType->addItem(tr("MEA model"));
+    funcType->addItem(tr("MCM model"));
 
     /** Setup of the chart view. */
     chart->legend()->hide();                                            /** Hides the legend of the figure. */
@@ -46,6 +57,8 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
      */
     QWidget *controlWidget = new QWidget(this);
     QGridLayout *controlLayout = new QGridLayout(controlWidget);
+    controlLayout->addWidget(funcLabel,0,0);
+    controlLayout->addWidget(funcType,0,1);
     controlLayout->addWidget(sigLabel,1,0);
     controlLayout->addWidget(sig,1,1);
     controlLayout->addWidget(fmaxLabel,2,0);
@@ -81,8 +94,24 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
      */
     double flim=fmax->text().toDouble()+1;
 
-    MEDModel<25,double> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MED model. */
-    MEDModel<25,double> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MED model. */
+    std::vector<float> rp;           /** @brief rp a vector of floats, stores the real process component. */
+    std::vector<float> ip;           /** @brief ip a vector of floats, stores the imaginary process component. */
+
+    MEDModel<25,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MED model. */
+    MEDModel<25,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MED model. */
+
+    MEDSModel<25,float> u2(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
+    MEDSModel<25,float> u2i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
+
+    MSEModel<25,float> u3(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
+    MSEModel<25,float> u3i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
+
+    MEAModel<25,float> u4(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
+    MEAModel<25,float> u4i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
+
+    MCModel<25,float> u5(sig->text().toDouble(),fmax->text().toDouble());  /** Declares real process component for the MEDS model. */
+    MCModel<25,float> u5i(sig->text().toDouble(),fmax->text().toDouble()); /** Declares imaginary process component for the MEDS model. */
+
 
     std::vector<double> x;                                                    /** @brief x vector of floats, stores the values of the x axis. */
     std::vector<double> f;                                                    /** @brief f vector of floats, stores the values of the y axis. */
@@ -91,8 +120,35 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
     x.reserve(50);
     f.reserve(50);
 
-    std::vector<double> rp = u1.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
-    std::vector<double> ip = u1i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
+    /** If the chosen model is the MED. */
+    if (funcType->currentText()==("MED model")){
+        rp = u1.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
+        ip = u1i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
+    }
+
+    /** If the chosen model is the MEDS. */
+    else if (funcType->currentText()==("MEDS model")){
+        rp = u2.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
+        ip = u2i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
+    }
+
+    /** If the chosen model is the MSE. */
+    else if (funcType->currentText()==("MSE model")){
+        rp = u3.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
+        ip = u3i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
+    }
+
+    /** If the chosen model is the MEA. */
+    else if (funcType->currentText()==("MEA model")){
+        rp = u4.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
+        ip = u4i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
+    }
+
+    /** If the chosen model is the MCM. */
+    else {
+        rp = u5.CalcDiscreteDopplerSpectrum();   /** @brief rp vector of floats, stores the doppler spectrum values of the real process. */
+        ip = u5i.CalcDiscreteDopplerSpectrum();  /** @brief rp vector of floats, stores the doppler spectrum values of the imaginary process. */
+    }
 
     /** Computes the Parametric PSD. */
     for(int i=0;i < rp.size()/2;i++){

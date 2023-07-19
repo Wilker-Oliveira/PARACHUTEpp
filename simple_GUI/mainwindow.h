@@ -163,6 +163,7 @@ private:
     void calcFreqRes();
 
     /** Object and widgets. */
+    QComboBox *funcType = nullptr;
     QPushButton *m_button = nullptr;
     QChart *chart = nullptr;
     QChartView *chartView = nullptr;
