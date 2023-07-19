@@ -19,7 +19,7 @@ ChannelAutoCorrelation::ChannelAutoCorrelation(QWidget *parent)
 
     /** Setup of the Standard Deviation parameter.*/
     QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
-    sig->setText(QString::number(0.7071));                              /** Iniciates the standard deviation in 0.7071 */
+    sig->setText(QString::number(1));                              /** Iniciates the standard deviation in 0.7071 */
     sig->setValidator( new QDoubleValidator(0, 10, 4, this) );          /** Restricts the input value.*/
 
     /** Setup of the Maximum Doppler Frequency. */
@@ -111,8 +111,8 @@ void ChannelAutoCorrelation::calcCorr(){
     std::vector<float> ip (s_length+1);       /** @brief rp a vector of floats, stores the imaginary process component. */
 
 
-    MEDModel<20,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MEA model. */
-    MEDModel<22,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MEA model. */
+    MEDModel<25,float> u1(sig->text().toDouble(),fmax->text().toDouble());   /** Declares real process component for the MEA model. */
+    MEDModel<25,float> u1i(sig->text().toDouble(),fmax->text().toDouble());  /** Declares imaginary process component for the MEA model. */
 
     /** Computes the parametric autocorrelation. */
     for(int i=0;i<s_length;i++){

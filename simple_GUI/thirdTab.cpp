@@ -17,12 +17,12 @@ ChannelFrequencyResponse::ChannelFrequencyResponse(QWidget *parent)
 
     /** Setup of the Standard Deviation parameter.*/
     QLabel *sigLabel = new QLabel(tr("Standard deviation: "));
-    sig->setText(QString::number(0.7071));                              /** Iniciates the standard deviation in 0.7071 */
+    sig->setText(QString::number(1));                              /** Iniciates the standard deviation in 0.7071 */
     sig->setValidator( new QDoubleValidator(0, 10, 4, this) );          /** Restricts the input value.*/
 
     /** Setup of the Maximum Doppler Frequency. */
     QLabel *fmaxLabel = new QLabel(tr("Maximum doppler frequency: "));
-    fmax->setText(QString::number(21));                                 /** Iniciates the maximum doppler frequency in 21 */
+    fmax->setText(QString::number(91));                                 /** Iniciates the maximum doppler frequency in 21 */
     fmax->setValidator( new QDoubleValidator(10, 1000, 4, this) );      /** Restricts the input value. */
 
     /** Setup of the chart view. */
