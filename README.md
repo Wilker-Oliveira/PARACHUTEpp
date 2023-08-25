@@ -22,8 +22,3 @@ Through this discipline, it was performed the study of the principles of channel
 - The generalized Rice Process
 - Suzuki Process Type I
 - Suzuki Process Type II
-
-### 3) Third implementation stage
-
-(Chapter 7 of MRC)
-- Frequency-Selective Model implementation
