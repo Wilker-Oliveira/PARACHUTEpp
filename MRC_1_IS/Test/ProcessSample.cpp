@@ -7,18 +7,18 @@
 #include <vector>
 
 //Model used in this code
-#include "../Models/JakesModel.hpp"
+#include "../Models/MEDModel.hpp"
 
 using namespace std;
 
 int main(){
 
-  const short N = 10; //number of multipath
+  const short N = 1000; //number of multipath
   float fc=2e9, mtv=30/3.6;
   float fmax=(mtv*fc)/3e8; //for jakes PSD 
   fmax=91;
   float tc=1/fmax;
-  float ti=0, tf=30*tc, dt=0.0005;
+  float ti=0, tf=30*tc, dt=0.0001;
   
   float fcut = std::sqrt(std::numbers::ln2_v<float>)*fmax; //for gaussian PSD
   float kc = 2.0/std::sqrt(2.0/std::numbers::ln2_v<float>); //for gaussiain PSD
@@ -28,17 +28,15 @@ int main(){
   ostream_iterator<string> out_it (OutFile,";");
   vector<float> time((tf-ti)/dt);
 
-  JakesModel<N,float> u1(1,fmax,false);
-  JakesModel<N,float>  u2(1,fmax,true);
-
-
+  MEDModel<N,float> u1(1,fmax);
+  MEDModel<N,float>  u2(1,fmax);
 
   for(float i=0;i<(tf-ti)/dt;i++) time[i] = ti + i*dt;
 
   vector<float> u1value = u1.CalcProcess(time);
   vector<float> u2value = u2.CalcProcess(time);
 
-  OutFile.open("RayleighChannelJakes.csv", ios::out | ios::trunc);
+  OutFile.open("RayleighChannelMED.csv", ios::out | ios::trunc);
 
   OutFile<<"time"<<';';
   OutFile<<"u1"<<';';
