@@ -66,7 +66,8 @@ public:
   //add periocity after implementation
 };
 
-template <short N, typename fpt> SoSModel<N, fpt>::SoSModel() {
+template <short N, typename fpt> 
+SoSModel<N, fpt>::SoSModel() {
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   this->rdevgen.seed(seed);
   if(!std::is_floating_point<fpt>()) throw std::runtime_error("fpt should be a Floating Point Type");
