@@ -32,7 +32,8 @@ protected:
   std::array<fpt,N> pathGains; /**< N-dimensional array of type fpt containing the path gains \f$c_{i,n}\f$ of the process. */
   std::array<fpt,N> dopplerFrequencies; /**< N-dimensional array of type fpt containing the Doppler frequencies \f$f_{i,n}\f$ of the process. */
   std::array<fpt,N> phases; /**< N-dimensional array of type fpt containing the phases \f$\theta_{i,n}\f$ of the process. */
-
+  std::mt19937 rdevgen; /**< Pseudorandom numbers generator*/
+  
 public:
   
   SoSModel();   /**< Set the attributes to nullptr. */  
@@ -65,8 +66,9 @@ public:
   //add periocity after implementation
 };
 
-template<short N, typename fpt>
-SoSModel<N,fpt>::SoSModel(){
+template <short N, typename fpt> SoSModel<N, fpt>::SoSModel() {
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  this->rdevgen.seed(seed);
   if(!std::is_floating_point<fpt>()) throw std::runtime_error("fpt should be a Floating Point Type");
   if(N<0) throw std::runtime_error("The number of multipath must be positive or zero");
 }
@@ -82,11 +84,9 @@ template<short N, typename fpt>
 
 void SoSModel<N,fpt>::genPhases() {
 
-  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  std::default_random_engine generator (seed);
   std::uniform_real_distribution<fpt> distribution(0.0,2*M_PI);
 
-  for(short i=0;i<N;i++) phases[i] = distribution(generator);
+  for(short i=0;i<N;i++) phases[i] = distribution(rdevgen);
 }
 
 template<short N, typename fpt>
