@@ -1,4 +1,12 @@
-#include "SoSModel.hpp"
+#ifndef JAKESMODEL_HPP
+#define JAKESMODEL_HPP
+
+#ifdef GPU
+#include "../Models/GPU/SoSModel_cuda.hpp"
+#else
+#include "../Models/CPU/SoSModel.hpp"
+#endif
+
 #include <iostream>
 
 template<short N, typename fpt>

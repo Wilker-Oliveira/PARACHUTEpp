@@ -8,7 +8,7 @@
 #include <complex>
 
 /** Model used in this code.*/
-#include "../Models/JakesModel.hpp"
+#include "../../src/Models/JakesModel.hpp"
 
 using namespace std;
 

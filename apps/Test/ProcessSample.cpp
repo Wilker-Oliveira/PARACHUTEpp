@@ -7,7 +7,7 @@
 #include <vector>
 
 //Model used in this code
-#include "../Models/MEDModel.hpp"
+#include "../../src/Models/MEDModel.hpp"
 
 using namespace std;
 

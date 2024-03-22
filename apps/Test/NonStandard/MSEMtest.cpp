@@ -6,7 +6,7 @@
 #include <iterator>
 #include <vector>
 #include <complex>
-#include "../Models/MSEModel.hpp"
+#include "../../../src/Models/MSEModel.hpp"
 
 using namespace std;
 

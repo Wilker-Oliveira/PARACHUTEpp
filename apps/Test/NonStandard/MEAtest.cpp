@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
-#include "../Models/MEAModel.hpp"
+#include "../../../src/Models/MEAModel.hpp"
 
 using namespace std;
 

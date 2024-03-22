@@ -6,7 +6,7 @@
 #include <iterator>
 #include <vector>
 #include <complex>
-#include "../Models/MCModel.hpp"
+#include "../../../src/Models/MCModel.hpp"
 
 using namespace std;
 

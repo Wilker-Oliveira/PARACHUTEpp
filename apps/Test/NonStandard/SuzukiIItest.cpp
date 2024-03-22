@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
-#include "../../Models/SuzukiChannelII.hpp"
+#include "../../../src/Models/SuzukiChannelII.hpp"
 
 using namespace std;
 

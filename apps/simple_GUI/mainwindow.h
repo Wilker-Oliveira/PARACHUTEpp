@@ -18,12 +18,12 @@
 #include <random>
 
 /** Channel model classes. */
-#include "../MRC_1_IS/Models/JakesModel.hpp"
-#include "../MRC_1_IS/Models/MCModel.hpp"
-#include "../MRC_1_IS/Models/MEAModel.hpp"
-#include "../MRC_1_IS/Models/MEDModel.hpp"
-#include "../MRC_1_IS/Models/MEDSModel.hpp"
-#include "../MRC_1_IS/Models/MSEModel.hpp"
+#include "../../src/Models/JakesModel.hpp"
+#include "../../src/Models/MCModel.hpp"
+#include "../../src/Models/MEAModel.hpp"
+#include "../../src/Models/MEDModel.hpp"
+#include "../../src/Models/MEDSModel.hpp"
+#include "../../src/Models/MSEModel.hpp"
 
 
 QT_BEGIN_NAMESPACE

@@ -1,7 +1,11 @@
 #ifndef MSEMODEL_HPP
 #define MSEMODEL_HPP
 
-#include "SoSModel.hpp"
+#ifdef GPU
+#include "../Models/GPU/SoSModel_cuda.hpp"
+#else
+#include "../Models/CPU/SoSModel.hpp"
+#endif
 
 template<short N, typename fpt>
 
