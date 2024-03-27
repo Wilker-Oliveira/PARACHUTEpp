@@ -5,7 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
-#include "DiscreteModels_cuda.hpp"
+#include "../src/discreteModels/GPU/DiscreteModels_cuda.hpp"
 
 int main(){
 

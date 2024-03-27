@@ -5,7 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
-#include "DiscreteModels.hpp"
+#include "../src/discreteModels/CPU/DiscreteModels.hpp"
 
 int main(){
 
