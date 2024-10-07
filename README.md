@@ -1,24 +1,33 @@
-# Channel_modelling
-This repository contains the implementation of Channel models and tools for channel modelling and analysis,
-the reference material for this implementations is some exercises from UFC teleinformatics department and also Mobile Fading Channels by Matthias Pätzold,
-almost all the implementations and code examples were made in C++20 standard and with some scripts in python3
-the software dependencies will be minimal and informed when needed it.
+# PARACHUTE++ 
 
-## Introduction
-Through this discipline, it was performed the study of the principles of channel modelling, having as main reference the book "Mobile Radio Channels" by Matthias Pätzold. The first part (AICT I) consisted of the study and implementation of channel models using C++, in C++20 standard. The second part (AICT II) consisted of the development of a GUI for the execution and observation of the behaviour, the properties and the statistics of the channel models in a simple and intuitive manner.
+PARACHUTE stands for: PARallel CHannel simUlaTor Evolution.
 
-## Repository contents
+Realistic wireless channel models are an important part of any wireless network simulator. It brings a solid modelling of the physical world into the simulations and allows meaningful insights about techniques and networks performance and optimizations. 
+With the evolution of wireless networks, the densification of its structure and the introduction of new wireless devices, the need of a performative channel generation library is adamant for research in wireless technologies.
+In this context, this repository contains the implementation of continouos and discrete channel models and tools for channel modelling and analysis.
+The reference material for this implementations is Mobile Radio Channels by Matthias Pätzold.
+All the library is written in C++20, it is fully documented using doxygen and it is also based on C++ templates allowing to the user to chose the precision of numerical representation which can impact in storage or speed of calculations.
 
-### 1) first implementation stage
+## Implemetation characteristics
 
-(Chapters 3 to 5 of MRC)
-- SoS class
-- Estimating methods for SoS class
-- Spectral Properties Class
+- Fully C++ 20 compatible.
+- Built in the OOP paradign.
+- Optimized numerical algorithms.
+- Fully documented with Doxygen.
+- Uses STL containers for storage.
+- GUI built in QT.
+- Examples.
+- Results tested against the theoretical models and the implemetation reference.
 
-### 2) Second implementation stage
+## Features
 
-(Chapter 6 of MRC)
-- The generalized Rice Process
-- Suzuki Process Type I
-- Suzuki Process Type II
+- Continuous Sum-of-Sinusoids models for time variant process generation.
+- 6 different models for Sum-of-Sinusoids parametrization.
+- Discrete random numbers generation with:
+  - Rayleigh distribution.
+  - Rice distribution.
+  - lognormal distribution.
+  - Suziki distribution.
+  - gaussian distribution.
+- Suzuki correlated models of Type I and II.
+- CUDA-accelerated implementation of all models mentioned above.
