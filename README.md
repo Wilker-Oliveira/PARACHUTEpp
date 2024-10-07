@@ -18,6 +18,7 @@ All the library is written in C++20, it is fully documented using doxygen and it
 - GUI built in QT.
 - Examples.
 - Results tested against the theoretical models and the implemetation reference.
+- Seamless integration with GPU implementation: the interface is exactly the same adding only a namespace.
 
 ## Features
 
